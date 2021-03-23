@@ -1,0 +1,111 @@
+<template>
+    <span>
+        <v-navigation-drawer
+            v-model="drawer"
+            app
+            right
+            class="d-flex"
+        >
+            <v-list dense>
+                <v-list-item-group
+                    v-model="selectedItem"
+                    color="primary"
+                >
+                    <v-list-item
+                        v-for="(item, i) in items"
+                        :key="i"
+                        :to="item.to"
+                    >
+                        <v-list-item-icon>
+                            <v-icon v-text="item.icon"></v-icon>
+                        </v-list-item-icon>
+
+                        <v-list-item-content>
+                            <v-list-item-title v-text="item.title"></v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
+
+
+                    <v-list-item to="/groups" v-if="user.permission == 3">
+                        <v-list-item-icon>
+                            <v-icon>mdi-format-line-spacing</v-icon>
+                        </v-list-item-icon>
+
+                        <v-list-item-content>
+                            <v-list-item-title>Группы</v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
+                </v-list-item-group>
+            </v-list>
+
+            <template v-slot:append>
+                <v-list-item class="grey lighten-2 rounded-t-sm" @click.prevent="logOut">
+                    <v-list-item-icon>
+                        <v-icon>mdi-exit-to-app</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        <v-list-item-title>Выйти</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+            </template>
+
+        </v-navigation-drawer>
+
+        <v-app-bar
+            app
+            color="primary"
+            dark
+        >
+
+
+            <v-toolbar-title align="center">
+                    <router-link to="/">
+                        <v-img src="../assets/uz_logo_white.svg" max-width="50" max-height="50"></v-img>
+                    </router-link>
+            </v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+        </v-app-bar>
+    </span>
+</template>
+
+<script>
+import { mapActions, mapGetters } from "vuex";
+
+export default {
+    name: "Header",
+
+    props: {
+        source: String,
+    },
+    data: () => ({
+        drawer: false,
+
+        selectedItem: 0,
+        items: [
+            { title: 'Главная', icon: 'mdi-home', to: '/'},
+            { title: 'О нас', icon: 'mdi-account-multiple', to: '/about' },
+            { title: 'Профиль', icon: 'mdi-account-box', to: '/profile'}
+        ],
+    }),
+    computed: {
+        ...mapGetters({
+            authenticated: 'auth/authenticated',
+            user: 'auth/user',
+        })
+    },
+    methods: {
+        ...mapActions({
+           logOutAction: 'auth/logOut'
+        }),
+
+        logOut() {
+            this.logOutAction().then(() => {
+                this.$router.replace({
+                    path: '/signin'
+                })
+            })
+        }
+    }
+};
+</script>
