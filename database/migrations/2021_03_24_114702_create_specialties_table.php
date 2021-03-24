@@ -4,16 +4,19 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class Tasks extends Migration
+class CreateSpecialtiesTable extends Migration
 {
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
     public function up()
     {
-        Schema::create('tasks', function (Blueprint $table) {
+        Schema::create('specialties', function (Blueprint $table) {
             $table->id();
-            $table->string('header')->nullable();
-            $table->string('description')->nullable();
-            $table->string('group')->nullable();
-            $table->timestamps();
+            $table->string('specialty_code');
+            $table->string('specialty_name');
         });
     }
 
@@ -24,6 +27,6 @@ class Tasks extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tasks');
+        Schema::dropIfExists('specialties');
     }
 }
