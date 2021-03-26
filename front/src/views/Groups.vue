@@ -1,5 +1,5 @@
 <template>
-    <div class="groups">
+    <div>
         <Header/>
         <h1 class="text-center">{{ permission = user.permission }}</h1>
     </div>
@@ -22,7 +22,7 @@ export default {
         }),
     },
     updated() {
-            if(this.permission != 3) { // проверка сделана через одно место ну и ладно
+            if(this.permission < 3) { // проверка сделана через одно место ну и ладно
                 location.replace('/');
             }
     }

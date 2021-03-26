@@ -13,4 +13,4 @@ store.subscribe((mutation) => {
             }
             break;
     }
-})
+});

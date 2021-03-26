@@ -17,7 +17,6 @@ class PermissionSeeder extends Seeder
     public function run()
     {
         $users = [
-            ['student'],
             ['trainee'],
             ['employer'],
             ['teacher'],

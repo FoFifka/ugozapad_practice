@@ -12,8 +12,8 @@
                     color="primary"
                 >
                     <v-list-item
-                        v-for="(item, i) in items"
-                        :key="i"
+                        v-for="item in items"
+                        :key="item"
                         :to="item.to"
                     >
                         <v-list-item-icon>
@@ -25,14 +25,40 @@
                         </v-list-item-content>
                     </v-list-item>
 
-
-                    <v-list-item to="/groups" v-if="user.permission == 3">
+                    <v-list-item to="/groups" v-if="user.permission > 2">
                         <v-list-item-icon>
                             <v-icon>mdi-format-line-spacing</v-icon>
                         </v-list-item-icon>
 
                         <v-list-item-content>
                             <v-list-item-title>Группы</v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
+                    <v-list-item to="/companies" v-if="user['permission'] == 1 || user['permission'] > 2">
+                        <v-list-item-icon>
+                            <v-icon>mdi-view-list</v-icon>
+                        </v-list-item-icon>
+
+                        <v-list-item-content>
+                            <v-list-item-title>Компании</v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
+                    <v-list-item :to="'/company_'+user['companies_id']" v-if="user['permission'] == 2">
+                        <v-list-item-icon>
+                            <v-icon>mdi-clipboard-outline</v-icon>
+                        </v-list-item-icon>
+
+                        <v-list-item-content>
+                            <v-list-item-title>Компания</v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
+                    <v-list-item to="/students" v-if="user['permission'] == 2">
+                        <v-list-item-icon>
+                            <v-icon>mdi-account-multiple</v-icon>
+                        </v-list-item-icon>
+
+                        <v-list-item-content>
+                            <v-list-item-title>Студенты</v-list-item-title>
                         </v-list-item-content>
                     </v-list-item>
                 </v-list-item-group>
@@ -106,6 +132,8 @@ export default {
                 })
             })
         }
+    },
+    updated() {
     }
 };
 </script>

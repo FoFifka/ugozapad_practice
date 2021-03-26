@@ -1,46 +1,7 @@
 <template>
     <div>
         <Header/>
-        <h1 class="text-center">Добро пожаловать!</h1>
-        <br>
-        <h1 class="text-center">Добро пожаловать!</h1>
-        <br>
-        <h1 class="text-center">Добро пожаловать!</h1>
-        <br>
-        <h1 class="text-center">Добро пожаловать!</h1>
-        <br>
-        <h1 class="text-center">Добро пожаловать!</h1>
-        <br>
-        <h1 class="text-center">Добро пожаловать!</h1>
-        <br>
-        <h1 class="text-center">Добро пожаловать!</h1>
-        <br>
-        <h1 class="text-center">Добро пожаловать!</h1>
-        <br>
-        <h1 class="text-center">Добро пожаловать!</h1>
-        <br>
-        <h1 class="text-center">Добро пожаловать!</h1>
-        <br>
-        <h1 class="text-center">Добро пожаловать!</h1>
-        <br>
-        <h1 class="text-center">Добро пожаловать!</h1>
-        <br>
-        <h1 class="text-center">Добро пожаловать!</h1>
-        <br>
-        <h1 class="text-center">Добро пожаловать!</h1>
-        <br>
-        <h1 class="text-center">Добро пожаловать!</h1>
-        <br>
-        <h1 class="text-center">Добро пожаловать!</h1>
-        <br>
-        <h1 class="text-center">Добро пожаловать!</h1>
-        <br>
-        <h1 class="text-center">Добро пожаловать!</h1>
-        <br>
-        <h1 class="text-center">Добро пожаловать!</h1>
-        <br>
-        <h1 class="text-center">Добро пожаловать!</h1>
-
+        <h1 class="text-center">Добро пожаловать на главную страницу!</h1>
     </div>
 </template>
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Group;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -32,6 +33,7 @@ class UserController extends Controller
                        'patronymic' => $user->patronymic,
                        'group' => $group,
                        'permission' => $user->permission_id,
+                       'companies_id' => $user->companies_id,
                        'avatar' => $user->avatar,
                        'api_token' => $user->api_token
                 ]
@@ -65,5 +67,9 @@ class UserController extends Controller
             $randomString .= $characters[rand(0, $charactersLength - 1)];
         }
         return $randomString;
+    }
+
+    public function getUsers() {
+        return User::all();
     }
 }

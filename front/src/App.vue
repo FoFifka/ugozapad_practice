@@ -13,11 +13,5 @@ export default {
     name: "App",
 
     components: {},
-    data: () => ({
-        page: "/",
-    }),
-
-
-
 };
 </script>

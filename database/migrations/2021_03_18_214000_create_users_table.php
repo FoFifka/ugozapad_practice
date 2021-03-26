@@ -19,6 +19,8 @@ class CreateUsersTable extends Migration
             $table->foreign('group_id')->references('id')->on('groups');
             $table->unsignedInteger('permission_id')->default(1);
             $table->foreign('permission_id')->references('id')->on('permissions');
+            $table->unsignedInteger('companies_id')->nullable();
+            $table->foreign('companies_id')->references('id')->on('companies');
             $table->string('avatar')->default(rand(0, 100) > 50 ? 'images/default-avatar.jpg' : 'images/default-avatar2.jpg');
             $table->text('api_token')->nullable();
             $table->timestamp('expires_at')->nullable();
