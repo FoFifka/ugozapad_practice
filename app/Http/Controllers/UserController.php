@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Group;
 use App\Models\User;
 use Illuminate\Http\Request;
+use function Sodium\add;
 
 class UserController extends Controller
 {
@@ -70,6 +71,28 @@ class UserController extends Controller
     }
 
     public function getUsers() {
-        return User::all();
+        $users = User::all();
+        $students = array();
+        foreach ($users as $user) {
+            $group_name = null;
+            if($user['group_id'] != null) {
+                $group = Group::find($user['group_id']);
+                $group_name = $group['group_name'];
+            }
+
+            array_push($students,
+            [
+                'id' => $user['id'],
+                'name' => $user['name'],
+                'surname' => $user['surname'],
+                'patronymic' => $user['patronymic'],
+                'group' => $group_name,
+                'permission' => $user['permission'],
+                'companies_id' => $user['companies_id'],
+                'avatar' => $user['avatar'],
+            ]
+            );
+        }
+        return $students;
     }
 }

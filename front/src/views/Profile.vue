@@ -48,6 +48,7 @@
                                                 ? "Админ"
                                                 : ""
                                 }}</v-card-text>
+                            <v-card-text v-if="user['companies_id'] !== '' || user['companies_id'] !== null" label="Группа">{{ getCompany(user['companies_id']) }}</v-card-text>
                         </v-list-item-content>
                     </v-flex>
                 </v-list-item>
@@ -107,7 +108,8 @@ export default {
             requestHasBeenSent: false,
             error: null,
             disabled: false,
-            loading: false
+            loading: false,
+            company_name: ""
         };
     },
     components: {
@@ -172,6 +174,12 @@ export default {
                 this.disabled = true;
                 this.loading = false;
             }
+        },
+        getCompany(company_id) {
+            axios.post('/api/company', { 'id': company_id}).then(response => {
+                this.company_name = response.data['company_name'];
+            });
+            return this.company_name;
         }
     }
 };

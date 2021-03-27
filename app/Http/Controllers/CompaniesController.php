@@ -16,4 +16,21 @@ class CompaniesController extends Controller
 
         return Company::find($id);
     }
+    public function addCompany(Request $request) {
+        $company = new Company();
+        $id = 1;
+        try {
+            $id = Company::get()->last()->id + 1;
+        } catch (\Exception $exception) {
+            $id = 1;
+        }
+        $company['id'] = $id;
+        $company['company_name'] = $request['company_name'];
+        $company['company_description'] = $request['company_description'];
+        $company->save();
+    }
+
+    public function deleteCompany(Request $request) {
+        return Company::destroy($request['id']);
+    }
 }

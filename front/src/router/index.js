@@ -8,6 +8,7 @@ import Groups from "../views/Groups";
 import Companies from "../views/Companies";
 import Company from "@/views/Company";
 import Vacancy from "@/views/Vacancy";
+import Students from "@/views/Students";
 
 Vue.use(VueRouter);
 
@@ -53,6 +54,12 @@ const routes = [
         name: "Вакансия",
         props: true,
         component: Vacancy
+    },
+    {
+        path: "/students",
+        name: "Студенты",
+        props: true,
+        component: Students
     }
 ];
 

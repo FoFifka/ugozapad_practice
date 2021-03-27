@@ -12,7 +12,7 @@
                             size="200"
                             color="grey"
                         >
-                            <img :src="company['company_image']" />
+                            <v-img :src="company['company_image']" />
                         </v-list-item-avatar>
                     </div>
                     <v-list-item-content>
@@ -20,11 +20,11 @@
                         <v-card-subtitle>{{ company['company_description'] }}</v-card-subtitle>
                     </v-list-item-content>
                 </v-list-item>
-                <v-card-actions v-if="company['id'] == user['companies_id']">
-                    <v-btn @click.stop="dialog = true">Добавить вакансию</v-btn>
+                <v-card-actions v-if="company['id'] == user['companies_id'] || user['permission'] > 3">
+                    <v-btn @click.stop="dialog_add_vacancy = true">Добавить вакансию</v-btn>
                 </v-card-actions>
             </v-card>
-            <v-dialog v-model="dialog" max-width="1200">
+            <v-dialog v-model="dialog_add_vacancy" max-width="1200">
                 <v-card :loading="loading" class="px-3">
                     <v-card-title class="headline">
                         Добавить вакансию
@@ -33,18 +33,21 @@
                         clearable
                         v-model="addvacancy_name_input"
                         clear-icon="mdi-close-circle"
-                        label="Заголовок"></v-text-field>
+                        type="text"
+                        label="Заголовок">
+                    </v-text-field>
                     <v-textarea
                         clearable
                         v-model="addvacancy_description_input"
                         clear-icon="mdi-close-circle"
+                        type="text"
                         label="Описание">
                     </v-textarea>
                     <v-card-actions>
                         <v-btn
                             color="primary"
                             text
-                            @click="dialog = false"
+                            @click="dialog_add_vacancy = false"
                         >
                             Отмена
                         </v-btn>
@@ -68,8 +71,8 @@
                 class="my-1"
                 :to="'vacancy_'+vacancy['id']"
             >
-                <v-card-title v-text="vacancy['name']"></v-card-title>
-                <v-card-text v-text="vacancy['description']"></v-card-text>
+                <v-card-title v-text="vacancy['vacancy_name']"></v-card-title>
+                <v-card-text v-text="vacancy['vacancy_description']"></v-card-text>
             </v-card>
         </div>
     </v-app>
@@ -90,7 +93,7 @@ export default {
             addvacancy_description_input: "",
             company: null,
             vacancies: null,
-            dialog: false,
+            dialog_add_vacancy: false,
             disabled: false,
             loading: false,
         };
@@ -105,23 +108,24 @@ export default {
         axios.post('/api/company', { id: this.company_id}).then(response => {
             this.company = response.data;
             document.title = this.company['company_name'];
-            console.log(response.data);
         });
         axios.post('/api/getvacancies', { 'companies_id': this.company_id}).then(response => {
             this.vacancies = response.data;
-            console.log(this.vacancies.length);
 
         });
     },
     methods: {
         addVacancy() {
+            console.log(this.addvacancy_name_input+" | "+this.addvacancy_description_input+" | "+this.company_id);
             axios.post('/api/addvacancy', {
-                'name': this.addvacancy_name_input,
-                'description': this.addvacancy_description_input,
+                'vacancy_name': this.addvacancy_name_input,
+                'vacancy_description': this.addvacancy_description_input,
                 'companies_id': this.company_id
-            }).then(response => {
-                console.log(response.data);
-            })
+            }).then(() => {
+                location.reload();
+            }).catch(error => {
+                console.log(error);
+            });
         }
     }
 };

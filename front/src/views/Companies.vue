@@ -1,6 +1,7 @@
 <template>
     <v-container fluid>
         <Header />
+        <v-btn v-if="user['permission'] > 3" @click="dialog_add_company = true">Добавить компанию</v-btn>
         <h1 class="text-center my-2">Компании с которыми у нас контракт</h1>
         <v-flex class="wrap row mx-auto justify-center" align-self-center>
             <v-card
@@ -27,6 +28,45 @@
                 </v-list-item>
             </v-card>
         </v-flex>
+        <v-dialog v-model="dialog_add_company" max-width="1200">
+            <v-card :loading="loading" class="px-3">
+                <v-card-title class="headline">
+                    Добавить вакансию
+                </v-card-title>
+                <v-text-field
+                    clearable
+                    v-model="addcompany_name_input"
+                    clear-icon="mdi-close-circle"
+                    type="text"
+                    label="Название компании">
+                </v-text-field>
+                <v-textarea
+                    clearable
+                    v-model="addcompany_description_input"
+                    clear-icon="mdi-close-circle"
+                    type="text"
+                    label="Описание">
+                </v-textarea>
+                <v-card-actions>
+                    <v-btn
+                        color="primary"
+                        text
+                        @click="dialog_add_company = false"
+                    >
+                        Отмена
+                    </v-btn>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                        color="primary"
+                        text
+                        :disabled="disabled"
+                        @click="addCompany"
+                    >
+                        Добавить
+                    </v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
     </v-container>
 </template>
 
@@ -38,6 +78,11 @@ import axios from "axios";
 export default {
     name: "Companies",
     data: () => ({
+        addcompany_name_input: "",
+        addcompany_description_input: "",
+        dialog_add_company: false,
+        loading: false,
+        disabled: false,
         companies: null
     }),
     components: {
@@ -58,6 +103,21 @@ export default {
             .catch(error => {
                 console.log(error);
             });
+    },
+    methods: {
+        deleteCompany() {
+            //
+        },
+        addCompany() {
+            axios.post('/api/addcompany', {
+                'company_name': this.addcompany_name_input,
+                'company_description': this.addcompany_description_input,
+            }).then(() => {
+                location.reload();
+            }).catch(error => {
+                console.log(error);
+            })
+        }
     },
 };
 </script>

@@ -35,6 +35,10 @@ Route::get('/getusers', [UserController::class, 'getUsers']);
 Route::post('/company', [CompaniesController::class, 'getCompany']);
 Route::get('/getcompanies', [CompaniesController::class, 'getCompanies']);
 
+Route::delete('/deletecompany', [CompaniesController::class, 'deleteCompany']);
+
+Route::post('/addcompany', [CompaniesController::class, 'addCompany']);
+
 // Vacancies
 
 Route::post('/addvacancy', [VacancyController::class, 'addVacancy']);
