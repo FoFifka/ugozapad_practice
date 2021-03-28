@@ -3,13 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Group;
+use App\Models\Permission;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use function Sodium\add;
 
 class UserController extends Controller
 {
-    public function getUser(Request $request)
+    public function getSignedUser(Request $request)
     {
         $user = $request->user();
         if($user->expires_at < today()) {  // проверка устарел ли токен
@@ -22,9 +24,7 @@ class UserController extends Controller
             $group = '';
             try {
                 $group = Group::find($user->group_id)->group_name;
-            } catch (\Exception $e) {
-
-            }
+            } catch (\Exception $e) {}
             return response()->json( // возвращение данных пользователя
                 [
                        'id' => $user->id,
@@ -42,9 +42,36 @@ class UserController extends Controller
         }
     }
 
+    public function getUser(Request $request) {
+        $user = User::find($request['id']);
+
+        $group = '';
+        $permission = '';
+        try {
+            $group = Group::find($user->group_id)->group_name;
+        } catch (\Exception $e) {}
+
+        try {
+            $permission = Permission::find($user->permission_id)->permission;
+        } catch (\Exception $e) {}
+
+        return response()->json([
+            'id' => $user->id,
+            'login' => $user->login,
+            'name' => $user->name,
+            'surname' => $user->surname,
+            'patronymic' => $user->patronymic,
+            'group' => $group,
+            'permission' => $permission,
+            'companies_id' => $user->companies_id,
+            'avatar' => $user->avatar,
+            'api_token' => $user->api_token
+        ]);
+    }
+
     public function updateUserImage(Request $request)
     {
-        $user = $request->user();
+        $user = User::find($request['id']);
 
         $request->validate([
            'image' => 'required|image|mimes:jpg,png,jpeg'
@@ -95,4 +122,37 @@ class UserController extends Controller
         }
         return $students;
     }
+
+    public function getStudents() {
+        $students = User::get()->where('permission_id', '=', 1);
+        return $students;
+    }
+
+    public function deleteUser(Request $request) {
+        User::destroy($request['id']);
+        return "1";
+    }
+
+    public function createUser(Request $request) {
+        $userdata = request()->validate([
+            'login' => 'required|unique:users',
+            'name' => 'required',
+            'surname' => 'required',
+            'patronymic' => 'sometimes',
+            'password' => 'required',
+            'email' => 'required',
+            'group_id' => 'sometimes',
+            'permission_id' => 'sometimes',
+            'companies_id' => 'sometimes',
+        ], ['required' => 'Не может быть пустым'], ['required|unique:users' => 'Пользователь с таким логином уже существует']);
+
+        $userdata['password'] = Hash::make($userdata['password']);
+        $user = new User($userdata);
+        $user->save();
+
+        return response()->json([$user],200);
+    }
 }
+
+
+

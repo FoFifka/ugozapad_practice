@@ -105,9 +105,6 @@ export default {
             });
     },
     methods: {
-        deleteCompany() {
-            //
-        },
         addCompany() {
             axios.post('/api/addcompany', {
                 'company_name': this.addcompany_name_input,

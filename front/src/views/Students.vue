@@ -58,7 +58,7 @@ export default {
         })
     },
     beforeMount() {
-        axios.get('/api/getusers').then(response => {
+        axios.get('/api/getstudents').then(response => {
             this.students = response.data;
         });
     }

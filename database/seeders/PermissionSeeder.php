@@ -17,10 +17,10 @@ class PermissionSeeder extends Seeder
     public function run()
     {
         $users = [
-            ['trainee'],
-            ['employer'],
-            ['teacher'],
-            ['admin']
+            ['Студент'],
+            ['Работадатель'],
+            ['Учитель'],
+            ['Админ']
         ];
 
         Schema::disableForeignKeyConstraints();

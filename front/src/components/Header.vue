@@ -24,7 +24,15 @@
                             <v-list-item-title v-text="item.title"></v-list-item-title>
                         </v-list-item-content>
                     </v-list-item>
+                    <v-list-item to="/profile">
+                        <v-list-item-icon>
+                            <v-icon>mdi-account-box</v-icon>
+                        </v-list-item-icon>
 
+                        <v-list-item-content>
+                            <v-list-item-title>Профиль</v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
                     <v-list-item to="/groups" v-if="user.permission > 2">
                         <v-list-item-icon>
                             <v-icon>mdi-format-line-spacing</v-icon>
@@ -59,6 +67,15 @@
 
                         <v-list-item-content>
                             <v-list-item-title>Студенты</v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
+                    <v-list-item to="/users" v-if="user['permission'] > 3">
+                        <v-list-item-icon>
+                            <v-icon>mdi-account-multiple</v-icon>
+                        </v-list-item-icon>
+
+                        <v-list-item-content>
+                            <v-list-item-title>Пользователи</v-list-item-title>
                         </v-list-item-content>
                     </v-list-item>
                 </v-list-item-group>
@@ -111,7 +128,6 @@ export default {
         items: [
             { title: 'Главная', icon: 'mdi-home', to: '/'},
             { title: 'О нас', icon: 'mdi-account-multiple', to: '/about' },
-            { title: 'Профиль', icon: 'mdi-account-box', to: '/profile'}
         ],
     }),
     computed: {

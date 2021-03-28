@@ -9,6 +9,8 @@ import Companies from "../views/Companies";
 import Company from "@/views/Company";
 import Vacancy from "@/views/Vacancy";
 import Students from "@/views/Students";
+import Users from "@/views/Users";
+import AnotherUserProfile from "@/views/AnotherUserProfile";
 
 Vue.use(VueRouter);
 
@@ -20,8 +22,14 @@ const routes = [
     },
     {
         path: "/profile",
-        component: Profile,
-        name: "Профиль"
+        name: "Профиль",
+        component: Profile
+    },
+    {
+        path: "/user_:user_id",
+        name: "Профиль",
+        props: true,
+        component: AnotherUserProfile
     },
     {
         path: "/about",
@@ -60,6 +68,12 @@ const routes = [
         name: "Студенты",
         props: true,
         component: Students
+    },
+    {
+        path: "/users",
+        name: "Пользователи",
+        props: true,
+        component: Users
     }
 ];
 

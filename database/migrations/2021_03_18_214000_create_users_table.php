@@ -15,6 +15,7 @@ class CreateUsersTable extends Migration
             $table->string('surname');
             $table->string('patronymic')->nullable();
             $table->string('password');
+            $table->string('email')->nullable()->unique();
             $table->unsignedInteger('group_id')->nullable();
             $table->foreign('group_id')->references('id')->on('groups');
             $table->unsignedInteger('permission_id')->default(1);

@@ -20,15 +20,23 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-Route::middleware('auth:api')->get('user', [UserController::class, 'getUser']);
+Route::middleware('auth:api')->get('user', [UserController::class, 'getSignedUser']);
 
-Route::middleware('auth:api')->post('updateuserimage', [UserController::class, 'updateUserImage']);
+Route::post('updateuserimage', [UserController::class, 'updateUserImage']);
 
 Route::post('/signin', [AuthController::class, 'signin']);
 Route::middleware('auth:api')->post('logout', [AuthController::class, 'logout']);
 Route::post('/signup', [AuthController::class, 'signup']);
 
+Route::post('/createuser', [UserController::class, 'createUser']);
+
 Route::get('/getusers', [UserController::class, 'getUsers']);
+
+Route::get('/getuser', [UserController::class, 'getUser']);
+
+Route::get('/getstudents', [UserController::class, 'getStudents']);
+
+Route::delete('/deleteuser', [UserController::class, 'deleteUser']);
 
 // Companies
 
@@ -46,6 +54,14 @@ Route::post('/getvacancies', [VacancyController::class, 'getVacancies']);
 Route::post('/getvacancy', [VacancyController::class, 'getVacancy']);
 
 Route::delete('/deletevacancy', [VacancyController::class, 'deleteVacancy']);
+
+Route::get('/getpermissions', function () {
+    return \App\Models\Permission::all();
+});
+
+Route::get('/getpermission', function (Request $request) {
+    return \App\Models\Permission::find($request['id']);
+});
 
 
 

@@ -2,6 +2,7 @@
     <v-app>
         <Header/>
         <div class="mx-10">
+            <v-btn v-if="user['permission'] > 3" @click="deleteCompany">Удалить компанию</v-btn>
             <v-card
                 outlined
             >
@@ -126,7 +127,12 @@ export default {
             }).catch(error => {
                 console.log(error);
             });
-        }
+        },
+        deleteCompany() {
+            axios.delete('/api/deletecompany', { params: { 'companies_id': this.company_id}}).then(() => {
+                location.replace('/companies');
+            })
+        },
     }
 };
 </script>

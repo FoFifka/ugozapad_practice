@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Company;
+use App\Models\User;
+use App\Models\Vacancy;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -31,6 +33,15 @@ class CompaniesController extends Controller
     }
 
     public function deleteCompany(Request $request) {
-        return Company::destroy($request['id']);
+        $vacansies = Vacancy::get()->where('companies_id', '=', $request['companies_id']);
+        $users = User::get()->where('companies_id', '=', $request['companies_id']);
+        foreach ($vacansies as $vacansy) {
+            $vacansy->destroy($vacansy['id']);
+        }
+        foreach ($users as $user) {
+            $user->destroy($user['id']);
+        }
+        Company::destroy($request['companies_id']);
+        return '1';
     }
 }
