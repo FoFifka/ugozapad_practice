@@ -11,9 +11,9 @@ class AuthController extends Controller
 {
     public function signin(Request $request)
     {
-        $login = $request->get('login');
-        $password = $request->get('password');
-        if (Auth::attempt(['login' => $login, 'password' => $password])) {
+        $email = $request['email'];
+        $password = $request['password'];
+        if (Auth::attempt(['email' => $email, 'password' => $password])) {
             $user = Auth::user();
             if($user->api_token != null) {
                 return response()->json([

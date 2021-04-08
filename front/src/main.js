@@ -11,8 +11,11 @@ require("@/store/subscriber");
 Vue.config.productionTip = false;
 
 
+
 if(localStorage.getItem('token')) {
     store.dispatch("auth/attempt", localStorage.getItem("token"));
+    store.dispatch('companies/getcompanies');
+    store.dispatch('users/getusers');
 } else {
     if(location.pathname !== '/signin') {
         location.replace("/signin")

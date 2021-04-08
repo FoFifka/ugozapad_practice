@@ -1,7 +1,7 @@
 <template>
     <v-container fluid>
         <Header />
-        <v-btn v-if="user['permission'] > 3" @click="dialog_add_company = true">Добавить компанию</v-btn>
+        <v-btn v-if="user['permission_id'] > 3" @click="dialog_add_company = true">Добавить компанию</v-btn>
         <h1 class="text-center my-2">Компании с которыми у нас контракт</h1>
         <v-flex class="wrap row mx-auto justify-center" align-self-center>
             <v-card
@@ -29,9 +29,9 @@
             </v-card>
         </v-flex>
         <v-dialog v-model="dialog_add_company" max-width="1200">
-            <v-card :loading="loading" class="px-3">
+            <v-card class="px-3">
                 <v-card-title class="headline">
-                    Добавить вакансию
+                    Добавить компанию
                 </v-card-title>
                 <v-text-field
                     clearable
@@ -47,6 +47,14 @@
                     type="text"
                     label="Описание">
                 </v-textarea>
+                <div class="text-center">
+                    <p>Логотип: <input
+                        type="file"
+                        accept="image/png, image/jpeg"
+                        @change="onFileSelected"
+                    /></p>
+
+                </div>
                 <v-card-actions>
                     <v-btn
                         color="primary"
@@ -59,8 +67,8 @@
                     <v-btn
                         color="primary"
                         text
-                        :disabled="disabled"
                         @click="addCompany"
+                        :disabled="disabled"
                     >
                         Добавить
                     </v-btn>
@@ -78,12 +86,12 @@ import axios from "axios";
 export default {
     name: "Companies",
     data: () => ({
+        request_has_been_sent: false,
         addcompany_name_input: "",
         addcompany_description_input: "",
         dialog_add_company: false,
-        loading: false,
+        selectedFile: null,
         disabled: false,
-        companies: null
     }),
     components: {
         Header
@@ -91,30 +99,60 @@ export default {
     computed: {
         ...mapGetters({
             authenticated: "auth/authenticated",
-            user: "auth/user"
+            user: "auth/user",
+            companies: "companies/companies",
         })
     },
-    beforeMount() {
-        axios
-            .get("/api/getcompanies")
-            .then(response => {
-                this.companies = response.data;
-            })
-            .catch(error => {
-                console.log(error);
-            });
+
+    updated() {
+        if(this.addcompany_name_input != '' && this.addcompany_description_input != '') {
+            this.disabled = false;
+        } else {
+            this.disabled = true;
+        }
     },
     methods: {
-        addCompany() {
-            axios.post('/api/addcompany', {
-                'company_name': this.addcompany_name_input,
-                'company_description': this.addcompany_description_input,
-            }).then(() => {
-                location.reload();
-            }).catch(error => {
-                console.log(error);
-            })
-        }
+        async addCompany() {
+            this.disabled = true;
+            const imgdata = new FormData();
+            try {
+                imgdata.append(
+                    "image",
+                    this.selectedFile,
+                );
+                if(this.selectedFile == null) {
+                    await axios.post('/api/addcompany', {
+                        'company_name': this.addcompany_name_input,
+                        'company_description': this.addcompany_description_input,
+                    }).then(response => {
+                        this.companies.push(response.data);
+                        this.dialog_add_company = false;
+
+                        console.log(this.companies);
+                        console.log(response.data);
+                    }).catch(() => {
+                        this.disabled = false;
+                    });
+                } else {
+                    await axios.post('/api/addcompany', imgdata, {
+                        params: {
+                            'company_name': this.addcompany_name_input,
+                            'company_description': this.addcompany_description_input,
+                        }
+                    }).then(response => {
+                        this.companies.push(response.data);
+                        this.dialog_add_company = false;
+                    }).catch(() => {
+                        this.disabled = false;
+                    });
+                }
+            } catch (e) {
+                //
+            }
+        },
+        onFileSelected(event) {
+            this.selectedFile = event.target.files[0];
+        },
     },
 };
 </script>

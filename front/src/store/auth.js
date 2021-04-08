@@ -7,6 +7,7 @@ export default {
     state: {
         token: null,
         user: null,
+        resumes: null,
     },
     getters: {
         authenticated(state) {
@@ -16,6 +17,9 @@ export default {
         user(state) {
             return state.user;
         },
+        resumes(state) {
+            return state.resumes;
+        }
     },
     mutations: {
         SET_TOKEN (state, token) {
@@ -23,6 +27,9 @@ export default {
         },
         SET_USER (state, data) {
             state.user = data;
+        },
+        SET_RESUMES(state, data) {
+            state.resumes = data
         }
     },
     actions: {
@@ -37,6 +44,9 @@ export default {
                 let response2 = await axios.get('api/user');
                 commit('SET_USER', response2.data);
 
+                let resumes = await  axios.get("/api/getresumes", {params: { "id": response2.data['id']}});
+                commit('SET_RESUMES', resumes.data);
+
                 if(location.pathname === '/signin') {
                     location.replace("/")
                 }
@@ -44,6 +54,8 @@ export default {
             } catch (e) {
                 commit('SET_TOKEN', null);
                 commit('SET_USER', null);
+                commit('SET_MARK', null);
+                commit('SET_RESUMES', null);
 
                 if(location.pathname !== '/signin') {
                     location.replace("/signin");

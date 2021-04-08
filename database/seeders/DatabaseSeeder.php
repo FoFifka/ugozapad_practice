@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Mark;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -15,6 +16,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             PermissionSeeder::class,
+            MarksSeeder::class,
             UserSeeder::class,
         ]);
         // \App\Models\User::factory(10)->create();

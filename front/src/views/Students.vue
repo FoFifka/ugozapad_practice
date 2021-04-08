@@ -1,17 +1,13 @@
 <template>
     <v-app class="mx-10">
-        <Header/>
+        <Header />
         <v-container fluid>
             <v-row class="justify-center">
-                <v-col
-                    class="d-flex"
-                    cols="12"
-                    sm="6"
-                >
+                <v-col class="d-flex" cols="12" sm="6">
                     <v-select
+                        class="mr-2"
                         label="Solo field"
                         solo
-                        class="mr-2"
                         transition="scroll-y-transition"
                     ></v-select>
                     <v-select
@@ -21,10 +17,37 @@
                     ></v-select>
                 </v-col>
             </v-row>
-            <v-card>
-                <v-list-item three-line
-                    v-for="student in students"
-                    :key="student">
+            <v-container style="height: 400px;" v-if="!students">
+                <v-row
+                    class="fill-height"
+                    align-content="center"
+                    justify="center"
+                >
+                    <v-col
+                        class="subtitle-1 text-center"
+                        cols="12"
+                    >
+                        Пожалуйста подождите, идёт загрузка студентов
+                    </v-col>
+                    <v-col cols="6">
+                        <v-progress-linear
+                            color="primary accent-4"
+                            indeterminate
+                            rounded
+                            height="6"
+                        ></v-progress-linear>
+                    </v-col>
+                </v-row>
+            </v-container>
+            <v-card
+                v-for="student in students"
+                :key="student">
+                <v-icon class="float-right ma-1"
+                        :value="hover"
+                        color="red"
+                        @click="deleteUser(student['id'])"
+                        v-if="user['permission_id'] > 3">mdi-delete</v-icon>
+                <v-list-item three-line :to="'user_'+student['id']">
                     <v-list-item-avatar tile size="50" color="primary">
                         <v-img :src="student['avatar']"></v-img>
                     </v-list-item-avatar>
@@ -41,11 +64,12 @@
 import Header from "@/components/Header";
 import { mapGetters } from "vuex";
 import axios from "axios";
+
 export default {
     name: "Students",
     data: function() {
         return {
-            students: null,
+            hover: false,
         };
     },
     components: {
@@ -54,17 +78,18 @@ export default {
     computed: {
         ...mapGetters({
             authenticated: "auth/authenticated",
-            user: "auth/user"
+            user: "auth/user",
+            students: "users/students"
         })
     },
-    beforeMount() {
-        axios.get('/api/getstudents').then(response => {
-            this.students = response.data;
-        });
+    methods: {
+        deleteUser(id) {
+            axios.delete('/api/deleteuser', { params: { 'id': id }}).then(() => {
+                location.reload();
+            })
+        },
     }
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

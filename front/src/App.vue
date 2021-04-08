@@ -13,5 +13,8 @@ export default {
     name: "App",
 
     components: {},
+    updated() {
+        console.clear();
+    }
 };
 </script>

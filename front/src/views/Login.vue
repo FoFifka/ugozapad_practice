@@ -28,9 +28,9 @@
                                     <v-card-text>
                                         <v-form>
                                             <v-text-field
-                                                label="Логин"
-                                                name="login"
-                                                v-model="login_input"
+                                                label="E-mail"
+                                                name="email"
+                                                v-model="email_input"
                                                 prepend-icon="mdi-account"
                                                 type="text"
                                             ></v-text-field>
@@ -64,7 +64,7 @@ import { mapActions } from "vuex";
 export default {
     name: "Login",
     data: () => ({
-        login_input: "",
+        email_input: "",
         password_input: "",
         requestHasBeenSent: false, // переменная для предотвращения многоразовой отправки запроса
         token: [],
@@ -77,7 +77,7 @@ export default {
         data_has_been_sent: false
     }),
     mounted() {
-        if(this.login_input == null || this.password_input.length < 5) {
+        if(this.email_input == null || this.password_input.length < 5) {
             this.disabled = true;
         } else {
             this.disabled = false;
@@ -85,7 +85,7 @@ export default {
     },
     updated() {
         if(!this.data_has_been_sent) {
-            if(this.login_input == null || this.password_input.length < 5) {
+            if(this.email_input == null || this.password_input.length < 5) {
                 this.disabled = true;
             } else {
                 this.disabled = false;
@@ -100,8 +100,8 @@ export default {
             if(!this.requestHasBeenSent && this.password_input.length >= 5) {
                 this.requestHasBeenSent = true;
 
-                this.userdata.login = this.login_input;
-                this.userdata.password = this.password_input;
+                this.userdata['email'] = this.email_input;
+                this.userdata['password'] = this.password_input;
 
                 this.data_has_been_sent = true;
                 this.loading = true; //  вкл анимацию загрузки на кнопке
@@ -110,9 +110,7 @@ export default {
                 this.signIn(this.userdata)
                     .then(() => {
                         this.loading = false;
-                        this.$router.replace({
-                            path: '/'
-                        })
+                        location.replace('/');
                     })
                     .catch(() => {
                         this.loading = false;

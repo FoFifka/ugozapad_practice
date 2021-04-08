@@ -3,6 +3,8 @@
         <v-navigation-drawer
             v-model="drawer"
             app
+
+            temporary
             right
             class="d-flex"
         >
@@ -33,7 +35,7 @@
                             <v-list-item-title>Профиль</v-list-item-title>
                         </v-list-item-content>
                     </v-list-item>
-                    <v-list-item to="/groups" v-if="user.permission > 2">
+                    <v-list-item to="/groups" v-if="user['permission_id'] > 2">
                         <v-list-item-icon>
                             <v-icon>mdi-format-line-spacing</v-icon>
                         </v-list-item-icon>
@@ -42,7 +44,7 @@
                             <v-list-item-title>Группы</v-list-item-title>
                         </v-list-item-content>
                     </v-list-item>
-                    <v-list-item to="/companies" v-if="user['permission'] == 1 || user['permission'] > 2">
+                    <v-list-item to="/companies">
                         <v-list-item-icon>
                             <v-icon>mdi-view-list</v-icon>
                         </v-list-item-icon>
@@ -51,7 +53,7 @@
                             <v-list-item-title>Компании</v-list-item-title>
                         </v-list-item-content>
                     </v-list-item>
-                    <v-list-item :to="'/company_'+user['companies_id']" v-if="user['permission'] == 2">
+                    <v-list-item :to="'/company_'+user['companies_id']" v-if="user['permission_id'] == 2">
                         <v-list-item-icon>
                             <v-icon>mdi-clipboard-outline</v-icon>
                         </v-list-item-icon>
@@ -60,7 +62,7 @@
                             <v-list-item-title>Компания</v-list-item-title>
                         </v-list-item-content>
                     </v-list-item>
-                    <v-list-item to="/students" v-if="user['permission'] == 2 || user['permission'] > 3">
+                    <v-list-item to="/students" v-if="user['permission_id'] == 2 || user['permission_id'] > 3">
                         <v-list-item-icon>
                             <v-icon>mdi-account-multiple</v-icon>
                         </v-list-item-icon>
@@ -69,7 +71,7 @@
                             <v-list-item-title>Студенты</v-list-item-title>
                         </v-list-item-content>
                     </v-list-item>
-                    <v-list-item to="/users" v-if="user['permission'] > 3">
+                    <v-list-item to="/users" v-if="user['permission_id'] > 3">
                         <v-list-item-icon>
                             <v-icon>mdi-account-multiple</v-icon>
                         </v-list-item-icon>
@@ -102,11 +104,11 @@
 
 
             <v-toolbar-title align="center">
-                    <router-link to="/">
-                        <v-img src="../assets/uz_logo_white.svg" max-width="50" max-height="50"></v-img>
+                    <router-link to="/" class="flex">
+                        <v-img src="../assets/uz_logo_white.svg" max-width="50" max-height="50" class="d-inline-block"></v-img>
                     </router-link>
             </v-toolbar-title>
-            <v-spacer></v-spacer>
+            <v-spacer/>
             <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
         </v-app-bar>
     </span>
@@ -143,9 +145,7 @@ export default {
 
         logOut() {
             this.logOutAction().then(() => {
-                this.$router.replace({
-                    path: '/signin'
-                })
+                location.replace('/signin');
             })
         }
     },

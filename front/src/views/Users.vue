@@ -1,6 +1,6 @@
 <template>
     <v-app class="mx-10">
-        <Header/>
+        <Header />
         <v-container fluid>
             <v-btn class="float-right" @click="dialog_add_user = true">Добавить пользователя</v-btn>
             <v-row class="justify-center">
@@ -10,9 +10,9 @@
                     sm="6"
                 >
                     <v-select
+                        class="mr-2"
                         label="Solo field"
                         solo
-                        class="mr-2"
                         transition="scroll-y-transition"
                     ></v-select>
                     <v-select
@@ -23,22 +23,48 @@
 
                 </v-col>
             </v-row>
+
+            <v-container style="height: 400px;" v-if="!users">
+                <v-row
+                    class="fill-height"
+                    align-content="center"
+                    justify="center"
+                >
+                    <v-col
+                        class="subtitle-1 text-center"
+                        cols="12"
+                    >
+                        Пожалуйста подождите, идёт загрузка пользователей
+                    </v-col>
+                    <v-col cols="6">
+                        <v-progress-linear
+                            color="primary accent-4"
+                            indeterminate
+                            rounded
+                            height="6"
+                        ></v-progress-linear>
+                    </v-col>
+                </v-row>
+            </v-container>
+
             <v-card
-                v-for="student in students"
-                :key="student">
-                    <v-icon class="float-right ma-1"
+                v-for="user in users"
+                :key="user">
+                <v-icon v-if="this_user['permission_id'] > 3"
                         :value="hover"
+                        class="float-right ma-1"
                         color="red"
-                        @click="deleteUser(student['id'])"
-                        v-if="user['permission'] > 3">mdi-delete</v-icon>
-                    <v-list-item three-line :to="'user_'+student['id']">
-                        <v-list-item-avatar tile size="50" color="primary">
-                            <v-img :src="student['avatar']"></v-img>
-                        </v-list-item-avatar>
-                        <v-list-item-content>
-                            <span>{{ student['name'] }} {{ student['surname'] }} {{ student['patronymic'] }} {{ student['group'] }}</span>
-                        </v-list-item-content>
-                    </v-list-item>
+                        @click="deleteUser(user['id'])">mdi-delete
+                </v-icon>
+                <v-list-item :to="'user_'+user['id']" three-line>
+                    <v-list-item-avatar color="primary" size="50" tile>
+                        <v-img :src="user['avatar']"></v-img>
+                    </v-list-item-avatar>
+                    <v-list-item-content>
+                        <span>{{ user["name"] }} {{ user["surname"] }} {{ user["patronymic"] }} {{ user["group"]
+                            }}</span>
+                    </v-list-item-content>
+                </v-list-item>
 
             </v-card>
             <v-dialog v-model="dialog_add_user" max-width="1200">
@@ -47,42 +73,35 @@
                         Добавить пользователя
                     </v-card-title>
                     <v-text-field
-                        clearable
-                        v-model="adduser_login_input"
-                        clear-icon="mdi-close-circle"
-                        type="text"
-                        label="Логин">
-                    </v-text-field>
-                    <v-text-field
-                        clearable
                         v-model="adduser_name_input"
                         clear-icon="mdi-close-circle"
-                        type="text"
-                        label="Имя">
+                        clearable
+                        label="Имя"
+                        type="text">
                     </v-text-field>
                     <v-text-field
-                        clearable
                         v-model="adduser_surname_input"
                         clear-icon="mdi-close-circle"
-                        type="text"
-                        label="Фамилия">
+                        clearable
+                        label="Фамилия"
+                        type="text">
                     </v-text-field>
                     <v-text-field
-                        clearable
                         v-model="adduser_patronymic_input"
                         clear-icon="mdi-close-circle"
-                        type="text"
-                        label="Отчество(не обязательно)">
+                        clearable
+                        label="Отчество(не обязательно)"
+                        type="text">
                     </v-text-field>
                     <v-text-field
-                        clearable
                         v-model="adduser_email_input"
                         clear-icon="mdi-close-circle"
-                        type="text"
-                        label="Почта(не обязательно)">
+                        clearable
+                        label="Почта"
+                        type="text">
                     </v-text-field>
                     <v-radio-group
-                        v-model="selected_radio"
+                        v-model="selected_radioButton"
                         mandatory>
                         <v-radio
                             v-for="permission in permissions"
@@ -101,9 +120,10 @@
                         </v-btn>
                         <v-spacer></v-spacer>
                         <v-btn
+                            :disabled="disabled"
+                            :loading="loading"
                             color="primary"
                             text
-                            :disabled="disabled"
                             @click="addUser"
                         >
                             Добавить
@@ -119,25 +139,25 @@
 import Header from "@/components/Header";
 import { mapGetters } from "vuex";
 import axios from "axios";
+import store from "@/store";
+
 export default {
     name: "Users",
     data: function() {
         return {
-            selected_radio: null,
-            adduser_login_input: "",
+            selected_radioButton: null,
             adduser_name_input: "",
             adduser_surname_input: "",
             adduser_patronymic_input: "",
             adduser_email_input: "",
             adduser_group_input: "",
-            adduser_permission_checkbox: false,
             adduser_companies_input: "",
             dialog_add_user: false,
             loading: false,
             disabled: false,
-            students: null,
-            hover: false,
-            permissions: null,
+            hover: false
+
+
         };
     },
     components: {
@@ -146,40 +166,43 @@ export default {
     computed: {
         ...mapGetters({
             authenticated: "auth/authenticated",
-            user: "auth/user"
-        })
-    },
-    beforeMount() {
-        axios.get('/api/getusers').then(response => {
-            this.students = response.data;
-        });
-        axios.get('/api/getpermissions').then(response => {
-            this.permissions = response.data;
+            this_user: "auth/user",
+            users: "users/users",
+            permissions: "users/permissions"
         })
     },
     methods: {
         deleteUser(id) {
-            axios.delete('/api/deleteuser', { params: { 'id': id }}).then(() => {
-                location.reload();
-            })
+            axios.delete("/api/deleteuser", { params: { "id": id } }).then(() => {
+                //location.reload();
+                store.dispatch('users/getusers');
+                store.dispatch('auth/signIn');
+            });
         },
         addUser() {
-            axios.post('/api/createuser', {
-                'login': this.adduser_login_input,
-                'name': this.adduser_name_input,
-                'surname': this.adduser_surname_input,
-                'patronymic': this.adduser_patronymic_input,
-                'password': 'password',
-                'email': this.adduser_email_input,
-                'group_id': '',
-                'permission_id': this.selected_radio['id'],
-                'companies_id': ''
-            }).then(() => {
-               location.reload();
-            }).catch(error => {
-                console.log(error);
+            this.disabled = true
+            this.loading = true
+            axios.post("/api/createuser", {
+                "name": this.adduser_name_input,
+                "surname": this.adduser_surname_input,
+                "patronymic": this.adduser_patronymic_input,
+                "email": this.adduser_email_input,
+                "group_id": this.adduser_group_input = "",
+                "permission_id": this.selected_radioButton["id"],
+                "companies_id": this.adduser_companies_input
+            }).then(response => {
+                this.users.push(response.data);
+                this.adduser_name_input = "";
+                this.adduser_surname_input = "";
+                this.adduser_patronymic_input = "";
+                this.adduser_email_input = "";
+                this.adduser_group_input = "";
+                this.adduser_companies_input = "";
+                this.dialog_add_user = false;
+                this.disabled = false
+                this.loading = false
             });
-        }
+        },
     }
 };
 </script>

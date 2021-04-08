@@ -1,7 +1,7 @@
 <template>
     <div>
         <Header/>
-        <h1 class="text-center">{{ permission = user.permission }}</h1>
+        <h1 class="text-center">{{ permission_id = user['permission_id'] }}</h1>
     </div>
 </template>
 
@@ -13,7 +13,7 @@ export default {
     components: { Header },
     data: () => ({
         checked: false,
-        permission: null
+        permission_id: null
     }),
     computed: {
         ...mapGetters({
@@ -22,7 +22,7 @@ export default {
         }),
     },
     updated() {
-            if(this.permission < 3) { // проверка сделана через одно место ну и ладно
+            if(this.permission_id < 3) { // проверка сделана через одно место ну и ладно
                 location.replace('/');
             }
     }

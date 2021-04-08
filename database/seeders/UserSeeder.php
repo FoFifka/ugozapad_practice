@@ -20,9 +20,9 @@ class UserSeeder extends Seeder
             ['ИС-31(д)']
         ];
         $users = [
-            ['Pinky', 'Pinky', 'Haired', 'Пинкович','Pinky', null , 2],
-            ['Sergo', 'Сергей', 'Михайлов', 'Юрьевич','Sergo', 1 , 1],
-            ['Nikola', 'Николай', 'Иванов', '', 'Nikola', 1 , 1],
+            ['Pinky', 'Pinky', 'Haired', 'Пинкович','Pinky', null , 2, null],
+            ['mikhaylov.2002@mail.ru', 'Сергей', 'Михайлов', 'Юрьевич','Sergo', 1 , 4, null],
+            ['Nikola', 'Николай', 'Иванов', '', 'Nikola', 1 , 1, "Моя область профиссиональных интересов \"Разработка игр\".\nМое место проживания Юго запад, желательна стажировка с дальнейшим трудоустройством.\nПредпочтительно удалённая форма работы."],
         ];
 
         Schema::disableForeignKeyConstraints();
@@ -37,13 +37,14 @@ class UserSeeder extends Seeder
         }
         foreach ($users as $user) {
             $sql_users[] = [
-                'login' => $user[0],
+                'email' => $user[0],
                 'name' => $user[1],
                 'surname' => $user[2],
                 'patronymic' => $user[3],
                 'password' => Hash::make($user[4]),
                 'group_id' => $user[5],
                 'permission_id' => $user[6],
+                'about_me' => $user[7],
                 'avatar' => rand(0, 100) > 50 ? 'images/default-avatar.jpg' : 'images/default-avatar2.jpg',
             ];
         }

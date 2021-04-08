@@ -6,7 +6,7 @@
                 <v-icon class="float-right ma-1"
                         color="red"
                         @click="deleteVacancy"
-                        v-if="vacancy['companies_id'] == user['companies_id'] || user['permission'] > 3">mdi-delete</v-icon>
+                        v-if="vacancy['companies_id'] == user['companies_id'] || user['permission_id'] > 3">mdi-delete</v-icon>
                 <v-card-title>{{ vacancy['vacancy_name']}}</v-card-title>
                 <v-card-subtitle>{{ vacancy['vacancy_description']}}</v-card-subtitle>
             </v-card>
