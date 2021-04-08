@@ -62,7 +62,7 @@
                             <v-list-item-title>Компания</v-list-item-title>
                         </v-list-item-content>
                     </v-list-item>
-                    <v-list-item to="/students" v-if="user['permission_id'] == 2 || user['permission_id'] > 3">
+                    <v-list-item to="/students" v-if="user['permission_id'] == 2 || user['permission_id'] > 2">
                         <v-list-item-icon>
                             <v-icon>mdi-account-multiple</v-icon>
                         </v-list-item-icon>
@@ -71,7 +71,7 @@
                             <v-list-item-title>Студенты</v-list-item-title>
                         </v-list-item-content>
                     </v-list-item>
-                    <v-list-item to="/users" v-if="user['permission_id'] > 3">
+                    <v-list-item to="/users" v-if="user['permission_id'] > 2">
                         <v-list-item-icon>
                             <v-icon>mdi-account-multiple</v-icon>
                         </v-list-item-icon>

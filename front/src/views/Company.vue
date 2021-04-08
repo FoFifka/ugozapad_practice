@@ -5,7 +5,7 @@
             <v-card
                 outlined
             >
-                <v-btn class="float-right red" small v-if="user['permission_id'] > 3" @click="dialog_delete_company = true">Удалить компанию</v-btn>
+                <v-btn class="float-right red" small v-if="user['permission_id'] > 2" @click="dialog_delete_company = true">Удалить компанию</v-btn>
                 <v-list-item three-line>
                     <div>
                         <v-list-item-avatar
@@ -15,18 +15,18 @@
                         >
                             <v-img :src="company['company_image']" />
                         </v-list-item-avatar>
-                        <p class="text-center justify-center" v-if="user['permission_id'] > 3">
-                            <v-btn color="primary" @click.stop="dialog_update_company_image = true">
+                        <p class="text-center justify-center" v-if="user['permission_id'] > 2">
+                            <v-btn color="primary" @click.stop="dialog_update_company_image = true" small>
                                 Обновить Логотип компании
                             </v-btn>
                         </p>
                     </div>
                     <v-list-item-content>
                         <v-card-title>{{ company['company_name'] }}</v-card-title>
-                        <v-card-subtitle>{{ company['company_description'] }}</v-card-subtitle>
+                        <v-card-subtitle v-html="company['company_description'].replace(/(?:\r\n|\r|\n)/g, '<br>')"></v-card-subtitle>
                     </v-list-item-content>
                 </v-list-item>
-                <v-card-actions v-if="company['id'] == user['companies_id'] || user['permission_id'] > 3">
+                <v-card-actions v-if="company['id'] == user['companies_id'] || user['permission_id'] > 2">
                     <v-btn @click.stop="dialog_add_vacancy = true">Добавить стажировку</v-btn>
                 </v-card-actions>
             </v-card>
@@ -116,6 +116,8 @@
                     >
                     <v-card-text>
                         Вы действительно хотите удалить эту компанию?
+
+                        Вместе с компанией удалаться все пользователи(работадатели) связанные с ней
                     </v-card-text>
                     <v-card-actions>
                         <v-btn

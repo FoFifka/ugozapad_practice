@@ -19,7 +19,6 @@ class PermissionSeeder extends Seeder
         $users = [
             ['Студент'],
             ['Работадатель'],
-            ['Учитель'],
             ['Админ']
         ];
 

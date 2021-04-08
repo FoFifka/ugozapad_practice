@@ -11,6 +11,7 @@ import Vacancy from "@/views/Vacancy";
 import Students from "@/views/Students";
 import Users from "@/views/Users";
 import AnotherUserProfile from "@/views/AnotherUserProfile";
+import WelcomePage from "@/views/WelcomePage";
 
 Vue.use(VueRouter);
 
@@ -19,6 +20,11 @@ const routes = [
         path: "/",
         component: Home,
         name: "Главная"
+    },
+    {
+        path: "/welcomepage",
+        name: "Добро пожаловать!",
+        component: WelcomePage
     },
     {
         path: "/profile",

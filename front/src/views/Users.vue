@@ -50,7 +50,7 @@
             <v-card
                 v-for="user in users"
                 :key="user">
-                <v-icon v-if="this_user['permission_id'] > 3"
+                <v-icon v-if="this_user['permission_id'] > 2"
                         :value="hover"
                         class="float-right ma-1"
                         color="red"
@@ -110,6 +110,26 @@
                             :value="permission"
                         ></v-radio>
                     </v-radio-group>
+                    <v-list-group v-if="selected_radioButton['id'] == 2"
+                        no-action
+                        sub-group
+                    >
+                        <template v-slot:activator>
+                            <v-list-item-content>
+                                <v-list-item-title>Компания</v-list-item-title>
+                            </v-list-item-content>
+                        </template>
+                        <v-radio-group
+                            v-model="selected_radioButton_company"
+                            mandatory>
+                            <v-radio
+                                v-for="company in companies"
+                                :key="company"
+                                :label="`${company['company_name']}`"
+                                :value="company"
+                            ></v-radio>
+                        </v-radio-group>
+                    </v-list-group>
                     <v-card-actions>
                         <v-btn
                             color="primary"
@@ -145,7 +165,8 @@ export default {
     name: "Users",
     data: function() {
         return {
-            selected_radioButton: null,
+            selected_radioButton: 0,
+            selected_radioButton_company: null,
             adduser_name_input: "",
             adduser_surname_input: "",
             adduser_patronymic_input: "",
@@ -168,7 +189,8 @@ export default {
             authenticated: "auth/authenticated",
             this_user: "auth/user",
             users: "users/users",
-            permissions: "users/permissions"
+            permissions: "users/permissions",
+            companies: "companies/companies"
         })
     },
     methods: {
@@ -182,6 +204,9 @@ export default {
         addUser() {
             this.disabled = true
             this.loading = true
+            if(this.selected_radioButton['id'] == 2) {
+                this.adduser_companies_input = this.selected_radioButton_company['id']
+            }
             axios.post("/api/createuser", {
                 "name": this.adduser_name_input,
                 "surname": this.adduser_surname_input,
@@ -197,7 +222,7 @@ export default {
                 this.adduser_patronymic_input = "";
                 this.adduser_email_input = "";
                 this.adduser_group_input = "";
-                this.adduser_companies_input = "";
+                this.adduser_companies_input = null;
                 this.dialog_add_user = false;
                 this.disabled = false
                 this.loading = false

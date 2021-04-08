@@ -17,8 +17,8 @@ if(localStorage.getItem('token')) {
     store.dispatch('companies/getcompanies');
     store.dispatch('users/getusers');
 } else {
-    if(location.pathname !== '/signin') {
-        location.replace("/signin")
+    if(location.pathname !== '/signin' && location.pathname !== '/welcomepage' ) {
+        location.replace("/welcomepage")
     }
 }
 

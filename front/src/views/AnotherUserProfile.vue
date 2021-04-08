@@ -16,7 +16,7 @@
                             >
                                 <v-img :src="this_user['avatar']" />
                             </v-list-item-avatar>
-                            <p v-if="user['id'] == user_id || user['permission_id'] > 3"
+                            <p v-if="user['id'] == user_id || user['permission_id'] > 2"
                                class="text-center justify-center">
                                 <v-btn color="primary" @click.stop="dialog_change_image = true">
                                     Обновить Аватар
@@ -54,7 +54,7 @@
                 </v-list-item>
             </v-card>
             <h2 v-if="this_user['permission_id'] < 2" class="mx-10">Моя средняя оценка
-                <v-btn v-if="user['id'] == user_id || user['permission_id'] > 3" small @click="dialog_add_mark = true">
+                <v-btn v-if="user['id'] == user_id || user['permission_id'] > 2" small @click="dialog_add_mark = true">
                     <v-icon dark>
                         {{ this_user["mark_id"] == null ? "mdi-plus-circle-outline" : "mdi-pencil-circle-outline" }}
                     </v-icon>
@@ -63,12 +63,12 @@
             </h2>
             <p v-if="this_user['permission_id'] < 2" class="mx-10">{{ this_user["mark"] }}</p>
             <h2 v-if="this_user['permission_id'] < 2" class="mx-10">Обо мне
-                <v-btn v-if="this_user['about_me'] == null && (user['id'] == user_id  || user['permission_id'] > 3)" small
+                <v-btn v-if="this_user['about_me'] == null && (user['id'] == user_id  || user['permission_id'] > 2)" small
                        @click="dialog_add_aboutme = true">
                     <v-icon dark>mdi-plus-circle-outline</v-icon>
                     Добавить
                 </v-btn>
-                <v-btn v-if="this_user['about_me'] != null && (user['id'] == user_id  || user['permission_id'] > 3)" small
+                <v-btn v-if="this_user['about_me'] != null && (user['id'] == user_id  || user['permission_id'] > 2)" small
                        @click="openDialogChangeAboutMe">
                     <v-icon dark>mdi-pencil-circle-outline</v-icon>
                     Изменить
@@ -76,9 +76,7 @@
             </h2>
             <p v-if="(this_user['about_me'] == null && this_user['about_me'] == '') && this_user['permission_id'] < 2" class="mx-10">Вы пока ничего не написали о себе
             </p>
-            <p v-if="this_user['about_me'] != null && this_user['about_me'] != ''" class="mx-10">
-                {{ this_user['about_me'] }}
-            </p>
+            <p v-if="this_user['about_me'] != null && this_user['about_me'] != ''" class="mx-10" v-html="this_user['about_me'].replace(/(?:\r\n|\r|\n)/g, '<br>')"></p>
             <v-dialog v-model="dialog_change_image" max-width="600">
                 <v-card :loading="loading">
                     <v-card-title class="headline"

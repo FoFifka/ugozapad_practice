@@ -55,12 +55,12 @@
             <h2 class="mx-10" v-if="user['permission_id'] < 2">Моя средняя оценка <v-btn small @click="dialog_add_mark = true"><v-icon dark>{{ user['mark_id'] == null ? "mdi-plus-circle-outline" : "mdi-pencil-circle-outline"}}</v-icon>{{ user['mark_id'] == null ? "Указать" : "Изменить"}}</v-btn></h2>
             <p class="mx-10" v-if="user['permission_id'] < 2">{{ user['mark'] == null ? "Оценки пока нет" : user['mark'] }}</p>
             <h2 v-if="user['permission_id'] < 2" class="mx-10">Обо мне
-                <v-btn v-if="user['about_me'] == null || user['permission_id'] > 3" small
+                <v-btn v-if="user['about_me'] == null || user['permission_id'] > 2" small
                        @click="dialog_add_aboutme = true">
                     <v-icon dark>mdi-plus-circle-outline</v-icon>
                     Добавить
                 </v-btn>
-                <v-btn v-if="user['about_me'] != null || user['permission_id'] > 3" small
+                <v-btn v-if="user['about_me'] != null || user['permission_id'] > 2" small
                        @click="openDialogChangeAboutMe">
                     <v-icon dark>mdi-pencil-circle-outline</v-icon>
                     Изменить
@@ -68,9 +68,7 @@
             </h2>
             <p v-if="(user['about_me'] == null && user['about_me'] == '') && user['permission_id'] < 2" class="mx-10">Вы пока ничего не написали о себе
             </p>
-            <p v-if="user['about_me'] != null && user['about_me'] != ''" class="mx-10">
-                {{ user['about_me'] }}
-            </p>
+            <p v-if="user['about_me'] != null && user['about_me'] != ''" class="mx-10" v-html="user['about_me'].replace(/(?:\r\n|\r|\n)/g, '<br>')"></p>
             <v-card v-for="resume in resumes" :key="resume" class="mx-10 mb-2">
                 <v-card-subtitle>{{ resume["about_me"] }}</v-card-subtitle>
             </v-card>

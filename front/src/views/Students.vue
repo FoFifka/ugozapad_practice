@@ -46,7 +46,7 @@
                         :value="hover"
                         color="red"
                         @click="deleteUser(student['id'])"
-                        v-if="user['permission_id'] > 3">mdi-delete</v-icon>
+                        v-if="user['permission_id'] > 2">mdi-delete</v-icon>
                 <v-list-item three-line :to="'user_'+student['id']">
                     <v-list-item-avatar tile size="50" color="primary">
                         <v-img :src="student['avatar']"></v-img>

@@ -1,7 +1,7 @@
 <template>
     <v-container fluid>
         <Header />
-        <v-btn v-if="user['permission_id'] > 3" @click="dialog_add_company = true">Добавить компанию</v-btn>
+        <v-btn v-if="user['permission_id'] > 2" @click="dialog_add_company = true">Добавить компанию</v-btn>
         <h1 class="text-center my-2">Компании с которыми у нас контракт</h1>
         <v-flex class="wrap row mx-auto justify-center" align-self-center>
             <v-card

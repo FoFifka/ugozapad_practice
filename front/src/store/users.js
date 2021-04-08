@@ -8,6 +8,7 @@ export default {
         students: null,
         permissions: null,
         marks: null,
+        groups: null,
     },
     getters: {
         users(state) {
@@ -21,6 +22,9 @@ export default {
         },
         marks(state) {
             return state.marks;
+        },
+        groups(state) {
+            return state.groups;
         }
     },
     mutations: {
@@ -36,6 +40,9 @@ export default {
         SET_MARKS(state, data) {
             state.marks = data;
         },
+        SET_GROUPS(state, data) {
+            state.groups = data;
+        },
     },
     actions: {
         async getusers ( { commit } ) {
@@ -47,15 +54,19 @@ export default {
                 commit('SET_STUDENTS', response2.data);
 
                 let response3 = await axios.get('/api/getpermissions');
-                commit('SET_PERMISSIONS', response3.data)
+                commit('SET_PERMISSIONS', response3.data);
 
                 let response4 = await axios.get("/api/getmarks");
-                commit('SET_MARKS', response4.data)
+                commit('SET_MARKS', response4.data);
+
+                let response5 = await axios.get('/api/getgroups');
+                commit('SET_GROUPS', response5.data);
             } catch (e) {
                 commit('SET_USERS', null);
                 commit('SET_STUDENTS', null);
                 commit('SET_PERMISSIONS', null);
                 commit('SET_MARKS', null);
+                commit('SET_GROUPS', null);
             }
         },
     }

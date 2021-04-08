@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CompaniesController;
+use App\Http\Controllers\GroupsController;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\MarkController;
 use App\Http\Controllers\ResumeController;
@@ -24,7 +25,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/signin', [AuthController::class, 'signin']);
 Route::middleware('auth:api')->post('logout', [AuthController::class, 'logout']);
-Route::post('/signup', [AuthController::class, 'signup']);
 
 // User
 Route::middleware('auth:api')->get('user', [UserController::class, 'getSignedUser']);
@@ -86,6 +86,14 @@ Route::get('getsentresumes', [ CompaniesController::class, 'resumesSent']);
 Route::get('/getmark', [ MarkController::class, 'getMark']);
 Route::get('/getmarks', [ MarkController::class, 'getMarks']);
 Route::post('/changemark', [UserController::class, 'changeUserMark']);
+
+// Groups
+
+Route::get('/getgroups', [GroupsController::class, 'getGroups']);
+Route::post('/addgroup', [GroupsController::class, 'addGroup']);
+
+
+
 
 
 

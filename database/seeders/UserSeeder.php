@@ -21,8 +21,8 @@ class UserSeeder extends Seeder
         ];
         $users = [
             ['Pinky', 'Pinky', 'Haired', 'Пинкович','Pinky', null , 2, null],
-            ['mikhaylov.2002@mail.ru', 'Сергей', 'Михайлов', 'Юрьевич','Sergo', 1 , 4, null],
-            ['Nikola', 'Николай', 'Иванов', '', 'Nikola', 1 , 1, "Моя область профиссиональных интересов \"Разработка игр\".\nМое место проживания Юго запад, желательна стажировка с дальнейшим трудоустройством.\nПредпочтительно удалённая форма работы."],
+            ['mikhaylov.2002@mail.ru', 'Сергей', 'Михайлов', 'Юрьевич','Sergo', 1 , 3, null],
+            ['Nikola', 'Николай', 'Иванов', '', 'Nikola', 1 , 1, "Моя область профиссиональных интересов \"Разработка игр\".\nМое место проживания Юго запад, желательна стажировка с дальнейшим трудоустройством.\nПредпочтительна удалённая форма работы."],
         ];
 
         Schema::disableForeignKeyConstraints();
@@ -45,7 +45,7 @@ class UserSeeder extends Seeder
                 'group_id' => $user[5],
                 'permission_id' => $user[6],
                 'about_me' => $user[7],
-                'avatar' => rand(0, 100) > 50 ? 'images/default-avatar.jpg' : 'images/default-avatar2.jpg',
+                'avatar' => rand(0, 100) > 50 ? 'default_img/default-avatar.jpg' : 'default_img/default-avatar2.jpg',
             ];
         }
         DB::table('groups')->insert($sql_groups);
