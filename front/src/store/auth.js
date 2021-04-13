@@ -7,7 +7,7 @@ export default {
     state: {
         token: null,
         user: null,
-        resumes: null,
+        willingPractice: null,
     },
     getters: {
         authenticated(state) {
@@ -17,9 +17,9 @@ export default {
         user(state) {
             return state.user;
         },
-        resumes(state) {
-            return state.resumes;
-        }
+        willingPracticeUsers(state) {
+            return state.willingPractice;
+        },
     },
     mutations: {
         SET_TOKEN (state, token) {
@@ -28,9 +28,9 @@ export default {
         SET_USER (state, data) {
             state.user = data;
         },
-        SET_RESUMES(state, data) {
-            state.resumes = data
-        }
+        SET_WILLING_PRACTICE(state, data) {
+            state.willingPractice = data;
+        },
     },
     actions: {
         async signIn({ dispatch }, credentials) {
@@ -44,18 +44,21 @@ export default {
                 let response2 = await axios.get('api/user');
                 commit('SET_USER', response2.data);
 
-                let resumes = await  axios.get("/api/getresumes", {params: { "id": response2.data['id']}});
-                commit('SET_RESUMES', resumes.data);
+
+                if(response2.data['companies_id'] != null) {
+                    let willingPractice = await axios.get('/api/getwillingpractice', { params: { 'company_id': response2.data['companies_id'] }});
+
+                    commit("SET_WILLING_PRACTICE", willingPractice.data);
+                }
 
                 if(location.pathname === '/signin') {
                     location.replace("/")
                 }
-
             } catch (e) {
                 commit('SET_TOKEN', null);
                 commit('SET_USER', null);
                 commit('SET_MARK', null);
-                commit('SET_RESUMES', null);
+                commit('SET_WILLING_PRACTICE', null);
 
                 if(location.pathname !== '/signin') {
                     location.replace("/signin");

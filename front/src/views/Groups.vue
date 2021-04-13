@@ -1,34 +1,31 @@
 <template>
     <app>
         <Header/>
-
-        <v-container style="height: 400px;" v-if="!groups">
-            <v-row
-                class="fill-height"
-                align-content="center"
-                justify="center"
-            >
-                <v-col
-                    class="subtitle-1 text-center"
-                    cols="12"
+        <v-data-table
+            :headers="headers"
+            :items="groups"
+            :items-per-page="15"
+            :footer-props="{
+                    showFirstLastPage: true,
+                    firstIcon: 'mdi-arrow-collapse-left',
+                    lastIcon: 'mdi-arrow-collapse-right',
+                    prevIcon: 'mdi-minus',
+                    nextIcon: 'mdi-plus'
+                }">
+            <template v-slot:item.actions>
+                <v-icon
+                    small
+                    class="mr-2"
                 >
-                    Пожалуйста подождите, идёт загрузка групп
-                </v-col>
-                <v-col cols="6">
-                    <v-progress-linear
-                        color="primary accent-4"
-                        indeterminate
-                        rounded
-                        height="6"
-                    ></v-progress-linear>
-                </v-col>
-            </v-row>
-        </v-container>
-        <v-card
-            v-for="group in groups "
-            :key="group">
-            <v-card-title>{{ group['group_name']}}</v-card-title>
-        </v-card>
+                    mdi-pencil
+                </v-icon>
+                <v-icon
+                    small
+                >
+                    mdi-delete
+                </v-icon>
+            </template>
+        </v-data-table>
     </app>
 </template>
 
@@ -39,6 +36,16 @@ import {mapGetters } from "vuex";
 export default {
     components: { Header },
     data: () => ({
+        headers: [
+            {
+                text: 'Группа',
+                align: 'start',
+                value: 'group_name'
+            },
+            {   text: 'Действия',
+                value: 'actions',
+                sortable: false },
+        ],
         checked: false,
         permission_id: null
     }),

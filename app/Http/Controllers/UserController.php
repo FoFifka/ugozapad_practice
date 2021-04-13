@@ -107,7 +107,6 @@ class UserController extends Controller
             'mark' => $mark,
             'about_me' => $user->about_me,
             'avatar' => $user->avatar,
-            'api_token' => $user->api_token
         ]);
     }
 
@@ -146,6 +145,13 @@ class UserController extends Controller
         $users1 = array();
         foreach ($users as $user) {
             $group_name = null;
+            $permission = Permission::find($user['permission_id']);
+            $mark1 = "";
+            try {
+                $mark = Mark::find($user['mark_id']);
+            } catch (\Exception $e) {
+
+            }
             if ($user['group_id'] != null) {
                 $group = Group::find($user['group_id']);
                 $group_name = $group['group_name'];
@@ -158,8 +164,10 @@ class UserController extends Controller
                     'surname' => $user['surname'],
                     'patronymic' => $user['patronymic'],
                     'group' => $group_name,
-                    'permission' => $user['permission'],
+                    'permission_id' => $user['permission_id'],
+                    'permission' => $permission['permission'],
                     'companies_id' => $user['companies_id'],
+                    'mark' => $mark1,
                     'avatar' => $user['avatar'],
                 ]
             );
@@ -177,12 +185,18 @@ class UserController extends Controller
                 $group = Group::find($student['group_id']);
                 $group_name = $group['group_name'];
             }
+            $mark = "";
+            try {
+                $mark =  $mark = Mark::find($student['mark_id'])->mark;
+            } catch (\Exception $e) {
+            }
             array_push($students1, [
                 'id' => $student->id,
                 'name' => $student->name,
                 'surname' => $student->surname,
                 'patronymic' => $student->patronymic,
                 'email' => $student->email,
+                'mark' => $mark,
                 'group' => $group_name,
                 'avatar' => $student->avatar,
             ]);
@@ -204,6 +218,7 @@ class UserController extends Controller
             'patronymic' => 'sometimes',
             'email' => 'required',
             'group_id' => 'sometimes',
+            'gender_id' => 'required',
             'permission_id' => 'sometimes',
             'companies_id' => 'sometimes',
         ], ['required' => 'Не может быть пустым'], ['required|unique:users' => 'Пользователь с таким логином уже существует']);
@@ -211,6 +226,9 @@ class UserController extends Controller
         $user = new User($userdata);
         $user['email'] = $userdata['email'];
         $user['permission_id'] = $request['permission_id'];
+        $user['companies_id'] = $request['companies_id'];
+        $user['group_id'] = $request['group_id'];
+        $user['gender_id'] = $request['gender_id'];
         $password = $this->generateRandomString(rand(10,15));
         $user['password'] = Hash::make($password);
         $user->save();
@@ -223,7 +241,44 @@ class UserController extends Controller
             $message->from('fireorbdhr@gmail.com', 'Юго-запад Практика');
         });
 
-        return response()->json($user, 200);
+        $group = '';
+        $permission = '';
+        $company = '';
+        $mark = '';
+        try {
+            $group = Group::find($user['group_id'])->group_name;
+        } catch (\Exception $e) {
+        }
+
+        try {
+            $permission = Permission::find($user['permission_id'])->permission;
+        } catch (\Exception $e) {
+        }
+
+        try {
+            $company = Company::find($user['companies_id'])->company_name;
+        } catch (\Exception $e) {
+        }
+        try {
+            $mark =  $mark = Mark::find($user['mark_id'])->mark;
+        } catch (\Exception $e) {
+        }
+
+        return response()->json([
+            'id' => $user['id'],
+            'name' => $user['name'],
+            'surname' => $user['surname'],
+            'patronymic' => $user['patronymic'],
+            'email' => $user['email'],
+            'group' => $group,
+            'permission_id' => $user['permission_id'],
+            'permission' => $permission,
+            'companies_id' => $user['companies_id'],
+            'company' => $company,
+            'mark_id' => $user['mark_id'],
+            'mark' => $mark,
+            'avatar' => $user['avatar'],
+        ], 200);
     }
 
     public function changeUserMark(Request $request)

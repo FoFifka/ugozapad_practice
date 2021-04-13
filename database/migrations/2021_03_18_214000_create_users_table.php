@@ -13,6 +13,8 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->string('surname');
             $table->string('patronymic')->nullable();
+            $table->unsignedInteger('gender_id');
+            $table->foreign('gender_id')->references('id')->on('genders');
             $table->string('password');
             $table->string('email')->unique();
             $table->unsignedInteger('group_id')->nullable();
@@ -24,7 +26,7 @@ class CreateUsersTable extends Migration
             $table->unsignedInteger('mark_id')->nullable();
             $table->foreign('mark_id')->references('id')->on('marks');
             $table->text('about_me')->nullable();
-            $table->string('avatar')->default(rand(0, 100) > 50 ? 'default_img/default-avatar.jpg' : 'default_img/default-avatar2.jpg');
+            $table->string('avatar')->default('default_img/default-avatar.jpg');
             $table->text('api_token')->nullable();
             $table->timestamp('expires_at')->nullable();
             $table->timestamps();

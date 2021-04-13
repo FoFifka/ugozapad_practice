@@ -6,6 +6,10 @@
                 class="mx-10"
                 outlined
             >
+                <span class="float-right ma-2" v-if="checkWillingPracticeUsers(willingPracticeUsers) && user['permission_id'] == 2">
+                            <v-btn class="mx-10" color="success">Принять</v-btn>
+                            <v-btn class="mx-2" color="red">Отклонить</v-btn>
+                </span>
                 <v-list-item three-line>
                     <v-flex class="wrap row">
                         <div>
@@ -234,7 +238,6 @@ export default {
             btn_add_aboutme_disable: false,
             loading: false,
             company_name: "",
-            //this_user_resumes: [],
             selected_radioButton: 0,
             input_aboutme: ""
         };
@@ -246,12 +249,12 @@ export default {
         ...mapGetters({
             authenticated: "auth/authenticated",
             user: "auth/user",
-            marks: "users/marks"
+            marks: "users/marks",
+            willingPracticeUsers: 'auth/willingPracticeUsers'
         })
     },
     mounted() {
         this.getUser();
-        //this.getResumes();
     },
     updated() {
         this.checkSelectedFile();
@@ -263,6 +266,19 @@ export default {
         }
     },
     methods: {
+        checkWillingPracticeUsers(willingPracticeUsers) {
+            try {
+                for (let i = 0; i < willingPracticeUsers.length; i++) {
+                    let willingPracticeUser = willingPracticeUsers[i];
+                    if(willingPracticeUser['id'] == this.this_user['id']) {
+                        return true;
+                    }
+                }
+            } catch (e) {
+                //
+            }
+            return false;
+        },
         async getUser() {
             await axios.get("/api/getuser", { params: { "id": this.user_id } }).then(response => {
                 this.this_user = response.data;
@@ -273,14 +289,6 @@ export default {
                 }
             });
         },
-
-        // getResumes() {
-        //     axios.get("/api/getresumes", { params: { "id": this.user_id } }).then(response => {
-        //         if (response.data != "") {
-        //             this.this_user_resumes = response.data;
-        //         }
-        //     });
-        // },
         checkSelectedFile() {
             if (this.selectedFile === null) {
                 this.disabled = true;
@@ -360,17 +368,14 @@ export default {
                 });
             }
         },
-        deleteResume() {
-            axios.delete('/api/deleteresume', {
-
-            }).then()
-        },
         openDialogChangeAboutMe() {
             this.dialog_change_aboutme = true;
             this.input_aboutme = this.this_user['about_me'];
         }
     }
 };
+
+
 </script>
 
 <style scoped></style>

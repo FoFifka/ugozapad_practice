@@ -13,6 +13,7 @@ export default new Vuetify({
         themes: {
             light: {
                 primary: '#123f91',
+                secondary: '#64B5F6',
             }
         }
     }

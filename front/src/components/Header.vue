@@ -3,7 +3,7 @@
         <v-navigation-drawer
             v-model="drawer"
             app
-
+            width="300px"
             temporary
             right
             class="d-flex"
@@ -60,6 +60,15 @@
 
                         <v-list-item-content>
                             <v-list-item-title>Компания</v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
+                    <v-list-item to="/whowantpractice" v-if="user['permission_id'] == 2">
+                        <v-list-item-icon>
+                            <v-icon>mdi-account-multiple-outline</v-icon>
+                        </v-list-item-icon>
+
+                        <v-list-item-content>
+                            <v-list-item-title>Желающие пройти практику</v-list-item-title>
                         </v-list-item-content>
                     </v-list-item>
                     <v-list-item to="/students" v-if="user['permission_id'] == 2 || user['permission_id'] > 2">

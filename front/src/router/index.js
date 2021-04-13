@@ -12,6 +12,7 @@ import Students from "@/views/Students";
 import Users from "@/views/Users";
 import AnotherUserProfile from "@/views/AnotherUserProfile";
 import WelcomePage from "@/views/WelcomePage";
+import WhoWantPractice from "@/views/WhoWantPractice";
 
 Vue.use(VueRouter);
 
@@ -80,6 +81,11 @@ const routes = [
         name: "Пользователи",
         props: true,
         component: Users
+    },
+    {
+        path: "/whowantpractice",
+        name: "Желающие пройти практику",
+        component: WhoWantPractice
     }
 ];
 

@@ -73,14 +73,6 @@ Route::get('/getpermission', function (Request $request) {
     return \App\Models\Permission::find($request['id']);
 });
 
-// Resumes
-
-Route::post('/addresume', [ ResumeController::class, 'addResume']);
-
-Route::get('/getresumes', [ ResumeController::class, 'getResumes']);
-
-Route::get('getsentresumes', [ CompaniesController::class, 'resumesSent']);
-
 // Marks
 
 Route::get('/getmark', [ MarkController::class, 'getMark']);
@@ -92,8 +84,43 @@ Route::post('/changemark', [UserController::class, 'changeUserMark']);
 Route::get('/getgroups', [GroupsController::class, 'getGroups']);
 Route::post('/addgroup', [GroupsController::class, 'addGroup']);
 
+// Practice
+
+Route::get('/getwillingpractice', [CompaniesController::class, 'getWillingPractice']);
+Route::get('/getwillingpracticeuser', [CompaniesController::class, 'getWillingPracticeUser']);
+Route::post('/addwillingpractice', [CompaniesController::class, 'addWillingPractice']);
+Route::delete('/deletewillingpractice', [CompaniesController::class, 'deleteWillingPractice']);
+
+Route::get('/getgenders', function () {
+    return \App\Models\Gender::all();
+});
+
+Route::get('/lalalapopopo', function () {
+    for ($i = 0; $i < 150; $i++) {
+        $user = new \App\Models\User();
+        $user['name'] = generateRandomString(rand(10, 20));
+        $user['surname'] = generateRandomString(rand(10, 20));
+        $user['password'] = generateRandomString(rand(10, 20));
+        $user['email'] = generateRandomString(rand(10, 20)) . "@lalalalalal@la";
+        $user['permission_id'] = 1;
+        $user['gender_id'] = 1;
+        $user->save();
+    }
+
+    return 1;
+});
 
 
+function generateRandomString($length = 10)
+{
+    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $charactersLength = strlen($characters);
+    $randomString = '';
+    for ($i = 0; $i < $length; $i++) {
+        $randomString .= $characters[rand(0, $charactersLength - 1)];
+    }
+    return $randomString;
+}
 
 
 

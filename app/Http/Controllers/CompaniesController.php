@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Company;
 use App\Models\Group;
+use App\Models\Mark;
 use App\Models\Resume;
 use App\Models\SentResumes;
 use App\Models\User;
 use App\Models\Vacancy;
+use App\Models\WillingPracticeUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -102,6 +104,59 @@ class CompaniesController extends Controller
             ];
         }
         return $response;
+    }
+
+    public function getWillingPractice(Request $request) {
+        $willingPracticeUsers = WillingPracticeUser::get()->where('company_id', '=', $request['company_id']);
+        $students = [];
+        foreach ($willingPracticeUsers as $willingPracticeUser) {
+            $group = null;
+            $group_name = null;
+            $student = User::find($willingPracticeUser['user_id']);
+            if ($student['group_id'] != null) {
+                $group = Group::find($student['group_id']);
+                $group_name = $group['group_name'];
+            }
+            $mark = "";
+            try {
+                $mark = Mark::find($willingPracticeUser['mark_id'])->mark;
+            } catch (\Exception $e) {
+            }
+            array_push($students, [
+                'id' => $student->id,
+                'name' => $student->name,
+                'surname' => $student->surname,
+                'patronymic' => $student->patronymic,
+                'email' => $student->email,
+                'mark' => $mark,
+                'group' => $group_name,
+                'avatar' => $student->avatar,
+            ]);
+        }
+        return $students;
+    }
+
+    public function addWillingPractice(Request $request) {
+        $willingPracticeUser = new WillingPracticeUser();
+        $willingPracticeUser['user_id'] = $request['user_id'];
+        $willingPracticeUser['company_id'] = $request['company_id'];
+        $willingPracticeUser->save();
+
+        return $willingPracticeUser;
+    }
+
+    public function getWillingPracticeUser(Request $request) {
+        $willingPracticeUser = WillingPracticeUser::get()->where('user_id', '=', $request['user_id']);
+        if(sizeof($willingPracticeUser) > 0) {
+            return 1;
+        } else {
+           return 0;
+        }
+    }
+
+    public function deleteWillingPractice(Request $request) {
+        WillingPracticeUser::destroy($request['id']);
+        return 1;
     }
 
     function generateRandomString($length = 10) {

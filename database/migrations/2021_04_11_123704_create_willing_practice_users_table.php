@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSentResumesTable extends Migration
+class CreateWillingPracticeUsersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateSentResumesTable extends Migration
      */
     public function up()
     {
-        Schema::create('sent_resumes', function (Blueprint $table) {
+        Schema::create('willing_practice_users', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('resume_id');
-            $table->foreign('resume_id')->references('id')->on('resumes');
+            $table->unsignedInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users');
             $table->unsignedInteger('company_id');
             $table->foreign('company_id')->references('id')->on('companies');
             $table->timestamps();
@@ -30,6 +30,6 @@ class CreateSentResumesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sent_resumes');
+        Schema::dropIfExists('willing_practice_users');
     }
 }

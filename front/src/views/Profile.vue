@@ -69,9 +69,6 @@
             <p v-if="(user['about_me'] == null && user['about_me'] == '') && user['permission_id'] < 2" class="mx-10">Вы пока ничего не написали о себе
             </p>
             <p v-if="user['about_me'] != null && user['about_me'] != ''" class="mx-10" v-html="user['about_me'].replace(/(?:\r\n|\r|\n)/g, '<br>')"></p>
-            <v-card v-for="resume in resumes" :key="resume" class="mx-10 mb-2">
-                <v-card-subtitle>{{ resume["about_me"] }}</v-card-subtitle>
-            </v-card>
             <v-dialog v-model="dialog_change_image" max-width="600">
                 <v-card :loading="loading">
                     <v-card-title class="headline"
@@ -239,7 +236,6 @@ export default {
             authenticated: "auth/authenticated",
             user: "auth/user",
             marks: "users/marks",
-            resumes: "auth/resumes"
         }),
 
     },

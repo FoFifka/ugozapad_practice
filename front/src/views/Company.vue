@@ -7,7 +7,7 @@
             >
                 <v-btn class="float-right red" small v-if="user['permission_id'] > 2" @click="dialog_delete_company = true">Удалить компанию</v-btn>
                 <v-list-item three-line>
-                    <div>
+                    <v-list-item-action class="text-center">
                         <v-list-item-avatar
                             tile
                             size="200"
@@ -15,19 +15,20 @@
                         >
                             <v-img :src="company['company_image']" />
                         </v-list-item-avatar>
-                        <p class="text-center justify-center" v-if="user['permission_id'] > 2">
-                            <v-btn color="primary" @click.stop="dialog_update_company_image = true" small>
-                                Обновить Логотип компании
-                            </v-btn>
-                        </p>
-                    </div>
+                        <v-btn color="primary" @click.stop="dialog_update_company_image = true" small v-if="user['permission_id'] > 2">
+                            Обновить Логотип компании
+                        </v-btn>
+                    </v-list-item-action>
                     <v-list-item-content>
                         <v-card-title>{{ company['company_name'] }}</v-card-title>
                         <v-card-subtitle v-html="company['company_description'].replace(/(?:\r\n|\r|\n)/g, '<br>')"></v-card-subtitle>
                     </v-list-item-content>
                 </v-list-item>
-                <v-card-actions v-if="company['id'] == user['companies_id'] || user['permission_id'] > 2">
-                    <v-btn @click.stop="dialog_add_vacancy = true">Добавить стажировку</v-btn>
+                <v-card-actions>
+                    <v-btn @click.stop="dialog_add_vacancy = true" v-if="company['id'] == user['companies_id'] || user['permission_id'] > 2">Добавить стажировку</v-btn>
+                    <v-btn v-if="user['permission_id'] < 2 && this_user_yet_willing_practice == 0" color="success" small @click="addWillingPracticeUser">Хочу здесь пройти практику</v-btn>
+                    <v-spacer/>
+                    <v-btn color="secondary" to="/whowantpractice" v-if="company['id'] == user['companies_id']">Желающие пройти практику</v-btn>
                 </v-card-actions>
             </v-card>
             <v-dialog v-model="dialog_add_vacancy" max-width="1200">
@@ -148,9 +149,26 @@
                 :to="'vacancy_'+vacancy['id']"
             >
                 <v-card-title v-text="vacancy['vacancy_name']"></v-card-title>
-                <v-card-text v-text="vacancy['vacancy_description']"></v-card-text>
+                <v-card-text v-text="vacancy['vacancy_description'].slice(0,20)+'...'"></v-card-text>
             </v-card>
         </div>
+        <v-snackbar
+            v-model="snackbar_add_willing_practice_user"
+        >
+            Вы отправили компании информацию о себе!
+
+            <template v-slot:action="{ attrs }">
+                <v-btn
+                    class="green--text"
+                    color="success"
+                    text
+                    v-bind="attrs"
+                    @click="snackbar_add_willing_practice_user = false"
+                >
+                    OK
+                </v-btn>
+            </template>
+        </v-snackbar>
     </v-app>
 </template>
 
@@ -165,6 +183,7 @@ export default {
     props: ['company_id'],
     data: function() {
         return {
+            snackbar_add_willing_practice_user: false,
             addvacancy_name_input: "",
             addvacancy_description_input: "",
             selectedFile: null,
@@ -175,6 +194,8 @@ export default {
             dialog_delete_company: false,
             disabled: false,
             loading: false,
+            this_user_yet_willing_practice: 1,
+            requestHasBeenSent: false,
         };
     },
     computed: {
@@ -192,6 +213,18 @@ export default {
             this.vacancies = response.data;
 
         });
+    },
+    updated() {
+        if(this.user && !this.requestHasBeenSent) {
+            this.requestHasBeenSent = true;
+            console.log(this.user);
+            axios.get('/api/getwillingpracticeuser', { params: {
+                'user_id' : this.user['id']
+                }}).then(response => {
+                    console.log(response);
+                    this.this_user_yet_willing_practice = response.data;
+            });
+        }
     },
     methods: {
         addVacancy() {
@@ -259,6 +292,16 @@ export default {
                 this.loading = false;
             }
         },
+
+        addWillingPracticeUser() {
+            axios.post('/api/addwillingpractice', {
+                'user_id' : this.user['id'],
+                'company_id' : this.company['id']
+            }).then(() => {
+                this.this_user_yet_willing_practice = 1;
+                this.snackbar_add_willing_practice_user = true;
+            });
+        }
     }
 };
 </script>

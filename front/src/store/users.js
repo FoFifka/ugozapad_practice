@@ -9,6 +9,7 @@ export default {
         permissions: null,
         marks: null,
         groups: null,
+        genders: null,
     },
     getters: {
         users(state) {
@@ -25,6 +26,9 @@ export default {
         },
         groups(state) {
             return state.groups;
+        },
+        genders(state) {
+            return state.genders;
         }
     },
     mutations: {
@@ -43,6 +47,9 @@ export default {
         SET_GROUPS(state, data) {
             state.groups = data;
         },
+        SET_GENDERS(state, data) {
+            state.genders = data;
+        }
     },
     actions: {
         async getusers ( { commit } ) {
@@ -61,12 +68,16 @@ export default {
 
                 let response5 = await axios.get('/api/getgroups');
                 commit('SET_GROUPS', response5.data);
+
+                let response6 = await axios.get('/api/getgenders');
+                commit('SET_GENDERS', response6.data);
             } catch (e) {
                 commit('SET_USERS', null);
                 commit('SET_STUDENTS', null);
                 commit('SET_PERMISSIONS', null);
                 commit('SET_MARKS', null);
                 commit('SET_GROUPS', null);
+                commit('SET_GENDERS', null);
             }
         },
     }

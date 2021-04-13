@@ -38,16 +38,13 @@ export default {
         }),
     },
     beforeMount() {
-        console.log(this.vacancy_id);
         axios.post('/api/getvacancy', { "id": this.vacancy_id }).then(response => {
             this.vacancy = response.data;
-            console.log(response.data);
         })
     },
     methods: {
         deleteVacancy() {
             axios.delete('/api/deletevacancy', { params: {"id": this.vacancy_id}} ).then(response => {
-                console.log(response.data);
                 location.replace('/company_'+this.vacancy['companies_id']);
             })
         }

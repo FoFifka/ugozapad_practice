@@ -3,51 +3,8 @@
         <Header />
         <v-container fluid>
             <v-btn class="float-right" @click="dialog_add_user = true">Добавить пользователя</v-btn>
-            <v-row class="justify-center">
-                <v-col
-                    class="d-flex"
-                    cols="12"
-                    sm="6"
-                >
-                    <v-select
-                        class="mr-2"
-                        label="Solo field"
-                        solo
-                        transition="scroll-y-transition"
-                    ></v-select>
-                    <v-select
-                        label="Solo field2"
-                        solo
-                        transition="scroll-y-transition"
-                    ></v-select>
 
-                </v-col>
-            </v-row>
-
-            <v-container style="height: 400px;" v-if="!users">
-                <v-row
-                    class="fill-height"
-                    align-content="center"
-                    justify="center"
-                >
-                    <v-col
-                        class="subtitle-1 text-center"
-                        cols="12"
-                    >
-                        Пожалуйста подождите, идёт загрузка пользователей
-                    </v-col>
-                    <v-col cols="6">
-                        <v-progress-linear
-                            color="primary accent-4"
-                            indeterminate
-                            rounded
-                            height="6"
-                        ></v-progress-linear>
-                    </v-col>
-                </v-row>
-            </v-container>
-
-            <v-card
+            <!-- <v-card
                 v-for="user in users"
                 :key="user">
                 <v-icon v-if="this_user['permission_id'] > 2"
@@ -66,6 +23,30 @@
                     </v-list-item-content>
                 </v-list-item>
 
+            </v-card> -->
+            <v-card>
+                <v-data-table
+                    :loading="loading_table"
+                    loading-text="Loading... Please wait"
+                    :headers="headers"
+                    :items="users"
+                    :items-per-page="15"
+                    @click:row="goToUser"
+                    :footer-props="{
+                    showFirstLastPage: true,
+                    firstIcon: 'mdi-arrow-collapse-left',
+                    lastIcon: 'mdi-arrow-collapse-right',
+                    prevIcon: 'mdi-minus',
+                    nextIcon: 'mdi-plus'
+                }">
+                    <template v-slot:item.actions v-if="this_user['permission_id'] > 2">
+                        <v-icon
+                            small
+                        >
+                            mdi-delete
+                        </v-icon>
+                    </template>
+                </v-data-table>
             </v-card>
             <v-dialog v-model="dialog_add_user" max-width="1200">
                 <v-card :loading="loading" class="px-3">
@@ -101,6 +82,16 @@
                         type="text">
                     </v-text-field>
                     <v-radio-group
+                        v-model="selected_radioButton_gender"
+                        mandatory>
+                        <v-radio
+                            v-for="gender in genders"
+                            :key="gender"
+                            :label="`${gender['gender']}`"
+                            :value="gender"
+                        ></v-radio>
+                    </v-radio-group>
+                    <v-radio-group
                         v-model="selected_radioButton"
                         mandatory>
                         <v-radio
@@ -127,6 +118,26 @@
                                 :key="company"
                                 :label="`${company['company_name']}`"
                                 :value="company"
+                            ></v-radio>
+                        </v-radio-group>
+                    </v-list-group>
+                    <v-list-group v-if="selected_radioButton['id'] == 1"
+                                  no-action
+                                  sub-group
+                    >
+                        <template v-slot:activator>
+                            <v-list-item-content>
+                                <v-list-item-title>Группа</v-list-item-title>
+                            </v-list-item-content>
+                        </template>
+                        <v-radio-group
+                            v-model="selected_radioButton_group"
+                            mandatory>
+                            <v-radio
+                                v-for="group in groups"
+                                :key="group"
+                                :label="`${group['group_name']}`"
+                                :value="group"
                             ></v-radio>
                         </v-radio-group>
                     </v-list-group>
@@ -160,23 +171,61 @@ import Header from "@/components/Header";
 import { mapGetters } from "vuex";
 import axios from "axios";
 import store from "@/store";
+import router from "@/router";
+import users from "@/store/users";
 
 export default {
     name: "Users",
     data: function() {
         return {
+            headers: [
+                {
+                    text: 'Имя',
+                    align: 'start',
+                    value: 'name'
+                },
+                {
+                    text: 'Фамилия',
+                    value: 'surname'
+                },
+                {
+                    text: 'Отчество',
+                    value: 'patronymic'
+                },
+                {
+                    text: 'Роль',
+                    value: 'permission'
+                },
+                {
+                    text: 'Группа',
+                    value: 'group'
+                },
+                {
+                    text: 'Оценка',
+                    value: 'mark'
+                },
+                {
+                    text: 'Действия',
+                    value: 'actions',
+                    sortable: false
+                },
+            ],
             selected_radioButton: 0,
-            selected_radioButton_company: null,
+            selected_radioButton_company: 0,
+            selected_radioButton_group: 0,
+            selected_radioButton_gender: 0,
             adduser_name_input: "",
             adduser_surname_input: "",
             adduser_patronymic_input: "",
             adduser_email_input: "",
-            adduser_group_input: "",
-            adduser_companies_input: "",
+            adduser_group_input: null,
+            adduser_companies_input: null,
             dialog_add_user: false,
+            loading_table: true,
             loading: false,
             disabled: false,
-            hover: false
+            hover: false,
+            usershasloaded: false
 
 
         };
@@ -190,8 +239,16 @@ export default {
             this_user: "auth/user",
             users: "users/users",
             permissions: "users/permissions",
-            companies: "companies/companies"
+            companies: "companies/companies",
+            groups: "users/groups",
+            genders: "users/genders"
         })
+    },
+    mounted() {
+      if(users && !this.usershasloaded) {
+          this.usershasloaded = true
+          this.loading_table = false;
+      }
     },
     methods: {
         deleteUser(id) {
@@ -207,12 +264,16 @@ export default {
             if(this.selected_radioButton['id'] == 2) {
                 this.adduser_companies_input = this.selected_radioButton_company['id']
             }
+            if(this.selected_radioButton['id'] == 1) {
+                this.adduser_group_input = this.selected_radioButton_group['id']
+            }
             axios.post("/api/createuser", {
                 "name": this.adduser_name_input,
                 "surname": this.adduser_surname_input,
                 "patronymic": this.adduser_patronymic_input,
                 "email": this.adduser_email_input,
-                "group_id": this.adduser_group_input = "",
+                "gender_id": this.selected_radioButton_gender['id'],
+                "group_id": this.adduser_group_input,
                 "permission_id": this.selected_radioButton["id"],
                 "companies_id": this.adduser_companies_input
             }).then(response => {
@@ -221,13 +282,19 @@ export default {
                 this.adduser_surname_input = "";
                 this.adduser_patronymic_input = "";
                 this.adduser_email_input = "";
-                this.adduser_group_input = "";
+                this.adduser_group_input = null;
                 this.adduser_companies_input = null;
                 this.dialog_add_user = false;
-                this.disabled = false
-                this.loading = false
+                this.disabled = false;
+                this.loading = false;
+            }).catch(() => {
+                this.disabled = false;
+                this.loading = false;
             });
         },
+        goToUser(row) {
+            router.replace('user_'+row['id'])
+        }
     }
 };
 </script>
