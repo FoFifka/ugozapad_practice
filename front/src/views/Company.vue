@@ -116,9 +116,9 @@
                     </v-card-title
                     >
                     <v-card-text>
-                        Вы действительно хотите удалить эту компанию?
+                        Вы действительно хотите удалить эту компанию
 
-                        Вместе с компанией удалаться все пользователи(работадатели) связанные с ней
+                        Вместе с компанией удалятся все пользователи(работадатели) связанные с ней
                     </v-card-text>
                     <v-card-actions>
                         <v-btn
@@ -234,8 +234,11 @@ export default {
                 'vacancy_name': this.addvacancy_name_input,
                 'vacancy_description': this.addvacancy_description_input,
                 'companies_id': this.company_id
-            }).then(() => {
-                location.reload();
+            }).then(response => {
+                this.vacancies.push(response.data);
+                this.dialog_add_vacancy = false;
+                this.addvacancy_name_input = "";
+                this.addvacancy_description_input = "";
             }).catch(() => {
                 //
             });

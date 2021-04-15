@@ -22,6 +22,8 @@ class VacancyController extends Controller
         $vacancy['vacancy_description'] = $request['vacancy_description'];
         $vacancy['companies_id'] = $request['companies_id'];
         $vacancy->save();
+
+        return $vacancy;
     }
 
     public function getVacancies(Request $request)

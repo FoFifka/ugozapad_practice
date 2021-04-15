@@ -4,11 +4,11 @@ export default {
     namespaced: true,
 
     state: {
-        users: null,
-        students: null,
+        users: [],
+        students: [],
         permissions: null,
         marks: null,
-        groups: null,
+        groups: [],
         genders: null,
     },
     getters: {
@@ -58,7 +58,7 @@ export default {
                 commit('SET_USERS', response.data);
 
             } catch (e) {
-                commit('SET_USERS', null);
+                commit('SET_USERS', []);
             }
         },
         async getGroups( { commit } ) {
@@ -66,7 +66,7 @@ export default {
                 let response5 = await axios.get('/api/getgroups');
                 commit('SET_GROUPS', response5.data);
             } catch (e) {
-                commit('SET_GROUPS', null);
+                commit('SET_GROUPS', []);
             }
         },
 
@@ -84,7 +84,7 @@ export default {
                 let response6 = await axios.get('/api/getgenders');
                 commit('SET_GENDERS', response6.data);
             } catch (e) {
-                commit('SET_STUDENTS', null);
+                commit('SET_STUDENTS', []);
                 commit('SET_PERMISSIONS', null);
                 commit('SET_MARKS', null);
                 commit('SET_GENDERS', null);

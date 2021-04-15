@@ -23,6 +23,7 @@
 import { mapGetters } from "vuex";
 import Header from "@/components/Header";
 import router from "@/router";
+import store from "@/store";
 
 export default {
     name: "WhoWantPractice",
@@ -54,6 +55,9 @@ export default {
       }
     },
     components: { Header },
+    beforeMount() {
+        store.dispatch('auth/getWillingPracticeUsers');
+    },
     computed: {
         ...mapGetters({
             authenticated: "auth/authenticated",

@@ -14,10 +14,10 @@ export default {
 
     components: {},
     mounted() {
-        console.clear();
+        //console.clear();
     },
     updated() {
-        console.clear();
+       // console.clear();
     }
 };
 </script>

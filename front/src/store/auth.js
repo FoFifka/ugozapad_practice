@@ -7,7 +7,7 @@ export default {
     state: {
         token: null,
         user: null,
-        willingPractice: null,
+        willingPractice: [],
     },
     getters: {
         authenticated(state) {
@@ -57,7 +57,7 @@ export default {
                 commit('SET_TOKEN', null);
                 commit('SET_USER', null);
                 commit('SET_MARK', null);
-                commit('SET_WILLING_PRACTICE', null);
+                commit('SET_WILLING_PRACTICE', []);
 
                 if(location.pathname !== '/signin') {
                     location.replace("/signin");
@@ -65,14 +65,14 @@ export default {
             }
         },
 
-        async getWillingPracticeUsers({ commit }) {
+        async getWillingPracticeUsers({ commit, state }) {
+            commit('SET_WILLING_PRACTICE', []);
             try {
-                commit('SET_WILLING_PRACTICE', null);
-                let willingPractice = await axios.get('/api/getwillingpractice', { params: { 'company_id': this.state.user.data['companies_id'] }});
+                let willingPractice = await axios.get('/api/getwillingpractice', { params: { 'company_id': state.user['companies_id'] }});
 
                 commit("SET_WILLING_PRACTICE", willingPractice.data);
             } catch (e) {
-                commit('SET_WILLING_PRACTICE', null);
+                commit('SET_WILLING_PRACTICE', []);
             }
         },
 

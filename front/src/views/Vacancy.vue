@@ -18,6 +18,7 @@
 import Header from "@/components/Header";
 import { mapGetters } from "vuex";
 import axios from "axios";
+import router from "@/router";
 
 export default {
     name: "Vacancy",
@@ -44,8 +45,8 @@ export default {
     },
     methods: {
         deleteVacancy() {
-            axios.delete('/api/deletevacancy', { params: {"id": this.vacancy_id}} ).then(response => {
-                location.replace('/company_'+this.vacancy['companies_id']);
+            axios.delete('/api/deletevacancy', { params: {"id": this.vacancy_id}} ).then(() => {
+                router.replace('/company_'+this.vacancy['companies_id']);
             })
         }
     },
