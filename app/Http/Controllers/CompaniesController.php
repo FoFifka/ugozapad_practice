@@ -155,7 +155,10 @@ class CompaniesController extends Controller
     }
 
     public function deleteWillingPractice(Request $request) {
-        WillingPracticeUser::destroy($request['id']);
+        $willingPracticeUsers = WillingPracticeUser::get()->where('user_id', '=', $request['user_id']);
+        foreach ($willingPracticeUsers as $willingPracticeUser) {
+            WillingPracticeUser::destroy($willingPracticeUser['id']);
+        }
         return 1;
     }
 

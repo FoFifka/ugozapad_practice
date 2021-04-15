@@ -13,6 +13,9 @@ export default {
     name: "App",
 
     components: {},
+    mounted() {
+        console.clear();
+    },
     updated() {
         console.clear();
     }

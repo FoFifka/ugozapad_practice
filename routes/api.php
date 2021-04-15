@@ -83,6 +83,8 @@ Route::post('/changemark', [UserController::class, 'changeUserMark']);
 
 Route::get('/getgroups', [GroupsController::class, 'getGroups']);
 Route::post('/addgroup', [GroupsController::class, 'addGroup']);
+Route::put('/changegroup', [ GroupsController::class, 'changeGroup']);
+Route::delete('/deletegroup', [GroupsController::class, 'deleteGroup']);
 
 // Practice
 

@@ -2,36 +2,16 @@
     <v-app class="mx-10">
         <Header />
         <v-container fluid>
-            <v-btn class="float-right" @click="dialog_add_user = true">Добавить пользователя</v-btn>
-
-            <!-- <v-card
-                v-for="user in users"
-                :key="user">
-                <v-icon v-if="this_user['permission_id'] > 2"
-                        :value="hover"
-                        class="float-right ma-1"
-                        color="red"
-                        @click="deleteUser(user['id'])">mdi-delete
-                </v-icon>
-                <v-list-item :to="'user_'+user['id']" three-line>
-                    <v-list-item-avatar color="primary" size="50" tile>
-                        <v-img :src="user['avatar']"></v-img>
-                    </v-list-item-avatar>
-                    <v-list-item-content>
-                        <span>{{ user["name"] }} {{ user["surname"] }} {{ user["patronymic"] }} {{ user["group"]
-                            }}</span>
-                    </v-list-item-content>
-                </v-list-item>
-
-            </v-card> -->
-            <v-card>
+            <v-row v-if="this_user['permission_id'] > 2" class="ma-2">
+                <v-spacer/>
+                <v-btn class="float-right" @click="dialog_add_user = true">Добавить пользователя</v-btn>
+            </v-row>
                 <v-data-table
                     :loading="loading_table"
                     loading-text="Loading... Please wait"
                     :headers="headers"
                     :items="users"
                     :items-per-page="15"
-                    @click:row="goToUser"
                     :footer-props="{
                     showFirstLastPage: true,
                     firstIcon: 'mdi-arrow-collapse-left',
@@ -39,15 +19,23 @@
                     prevIcon: 'mdi-minus',
                     nextIcon: 'mdi-plus'
                 }">
-                    <template v-slot:item.actions v-if="this_user['permission_id'] > 2">
+                    <template v-slot:item.actions="{ item }">
                         <v-icon
+                            v-if="this_user['permission_id'] > 2"
+                            @click="deleteUser(item['id'])"
                             small
                         >
                             mdi-delete
                         </v-icon>
+                        <v-icon
+                            class="ml-1"
+                            @click="goToUser(item)"
+                            small
+                        >
+                            mdi-account-box
+                        </v-icon>
                     </template>
                 </v-data-table>
-            </v-card>
             <v-dialog v-model="dialog_add_user" max-width="1200">
                 <v-card :loading="loading" class="px-3">
                     <v-card-title class="headline">
@@ -292,8 +280,8 @@ export default {
                 this.loading = false;
             });
         },
-        goToUser(row) {
-            router.replace('user_'+row['id'])
+        goToUser(item) {
+            router.replace('user_'+item['id'])
         }
     }
 };

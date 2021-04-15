@@ -8,7 +8,7 @@
             >
                 <span class="float-right ma-2" v-if="checkWillingPracticeUsers(willingPracticeUsers) && user['permission_id'] == 2">
                             <v-btn class="mx-10" color="success">Принять</v-btn>
-                            <v-btn class="mx-2" color="red">Отклонить</v-btn>
+                            <v-btn class="mx-2" color="red" @click="deniedUser">Отклонить</v-btn>
                 </span>
                 <v-list-item three-line>
                     <v-flex class="wrap row">
@@ -159,7 +159,7 @@
             <v-dialog v-model="dialog_add_aboutme" max-width="600">
                 <v-card>
                     <v-card-title class="headline"
-                    >Создать резюме
+                    >О Себе
                     </v-card-title>
                     <v-textarea class="mx-5" v-model="input_aboutme" label="Напишите о себе">
 
@@ -220,6 +220,7 @@
 import Header from "@/components/Header";
 import { mapGetters } from "vuex";
 import axios from "axios";
+import store from "@/store";
 
 export default {
     name: "AnotherUserProfile",
@@ -371,6 +372,13 @@ export default {
         openDialogChangeAboutMe() {
             this.dialog_change_aboutme = true;
             this.input_aboutme = this.this_user['about_me'];
+        },
+        async deniedUser() {
+            axios.delete('/api/deletewillingpractice', { params: {
+                    'user_id': this.user_id
+                }}).then(() => {
+                store.dispatch('auth/getWillingPracticeUsers');
+            });
         }
     }
 };

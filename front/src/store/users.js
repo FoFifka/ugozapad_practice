@@ -57,6 +57,21 @@ export default {
                 let response = await axios.get('/api/getusers');
                 commit('SET_USERS', response.data);
 
+            } catch (e) {
+                commit('SET_USERS', null);
+            }
+        },
+        async getGroups( { commit } ) {
+            try {
+                let response5 = await axios.get('/api/getgroups');
+                commit('SET_GROUPS', response5.data);
+            } catch (e) {
+                commit('SET_GROUPS', null);
+            }
+        },
+
+        async getAny( { commit } ) {
+            try {
                 let response2 = await axios.get("/api/getstudents");
                 commit('SET_STUDENTS', response2.data);
 
@@ -66,19 +81,14 @@ export default {
                 let response4 = await axios.get("/api/getmarks");
                 commit('SET_MARKS', response4.data);
 
-                let response5 = await axios.get('/api/getgroups');
-                commit('SET_GROUPS', response5.data);
-
                 let response6 = await axios.get('/api/getgenders');
                 commit('SET_GENDERS', response6.data);
             } catch (e) {
-                commit('SET_USERS', null);
                 commit('SET_STUDENTS', null);
                 commit('SET_PERMISSIONS', null);
                 commit('SET_MARKS', null);
-                commit('SET_GROUPS', null);
                 commit('SET_GENDERS', null);
             }
-        },
+        }
     }
 };

@@ -16,6 +16,8 @@ if(localStorage.getItem('token')) {
     store.dispatch("auth/attempt", localStorage.getItem("token"));
     store.dispatch('companies/getcompanies');
     store.dispatch('users/getusers');
+    store.dispatch('users/getGroups');
+    store.dispatch('users/getAny');
 } else {
     if(location.pathname !== '/signin' && location.pathname !== '/welcomepage' ) {
         location.replace("/welcomepage")

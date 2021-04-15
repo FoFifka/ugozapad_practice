@@ -110,7 +110,7 @@
                 </v-card>
             </v-dialog>
             <v-dialog v-model="dialog_delete_company" max-width="600">
-                <v-card :loading="loading">
+                <v-card :loading="loading_delete">
                     <v-card-title class="headline"
                     >Удалить компанию
                     </v-card-title
@@ -133,7 +133,7 @@
                             class="red--text"
                             text
                             @click="deleteCompany"
-                            :disabled="disabled"
+                            :disabled="disabled_delete"
                         >
                             Удалить
                         </v-btn>
@@ -176,6 +176,8 @@
 import axios from "axios";
 import Header from "@/components/Header";
 import { mapGetters } from "vuex";
+import store from "@/store";
+import router from "@/router";
 
 export default {
     name: "Company",
@@ -193,7 +195,9 @@ export default {
             dialog_add_vacancy: false,
             dialog_delete_company: false,
             disabled: false,
+            disabled_delete: false,
             loading: false,
+            loading_delete: false,
             this_user_yet_willing_practice: 1,
             requestHasBeenSent: false,
         };
@@ -217,31 +221,30 @@ export default {
     updated() {
         if(this.user && !this.requestHasBeenSent) {
             this.requestHasBeenSent = true;
-            console.log(this.user);
             axios.get('/api/getwillingpracticeuser', { params: {
                 'user_id' : this.user['id']
                 }}).then(response => {
-                    console.log(response);
                     this.this_user_yet_willing_practice = response.data;
             });
         }
     },
     methods: {
         addVacancy() {
-            console.log(this.addvacancy_name_input+" | "+this.addvacancy_description_input+" | "+this.company_id);
             axios.post('/api/addvacancy', {
                 'vacancy_name': this.addvacancy_name_input,
                 'vacancy_description': this.addvacancy_description_input,
                 'companies_id': this.company_id
             }).then(() => {
                 location.reload();
-            }).catch(error => {
-                console.log(error);
+            }).catch(() => {
+                //
             });
         },
         deleteCompany() {
             axios.delete('/api/deletecompany', { params: { 'companies_id': this.company_id}}).then(() => {
-                location.replace('/companies');
+                store.dispatch('companies/getcompanies');
+                store.dispatch('users/getusers');
+                router.replace('/companies');
             })
         },
 
@@ -257,7 +260,6 @@ export default {
             this.checkSelectedFile();
         },
         async onUpload(company_id) {
-            console.log(company_id);
 
             this.requestHasBeenSent = true;
             this.disabled = true;
