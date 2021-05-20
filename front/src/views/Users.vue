@@ -16,8 +16,8 @@
                     showFirstLastPage: true,
                     firstIcon: 'mdi-arrow-collapse-left',
                     lastIcon: 'mdi-arrow-collapse-right',
-                    prevIcon: 'mdi-minus',
-                    nextIcon: 'mdi-plus'
+                    prevIcon: 'mdi-arrow-left',
+                    nextIcon: 'mdi-arrow-right'
                 }">
                     <template v-slot:item.actions="{ item }">
                         <v-icon
@@ -263,7 +263,7 @@ export default {
                 "gender_id": this.selected_radioButton_gender['id'],
                 "group_id": this.adduser_group_input,
                 "permission_id": this.selected_radioButton["id"],
-                "companies_id": this.adduser_companies_input
+                "company_id": this.adduser_companies_input
             }).then(response => {
                 this.users.push(response.data);
                 this.adduser_name_input = "";

@@ -37,7 +37,7 @@ class UserController extends Controller
             } catch (\Exception $e) {
             }
             try {
-                $company = Company::find($user->companies_id)->company_name;
+                $company = Company::find($user->company_id)->company_name;
             } catch (\Exception $e) {
             }
             try {
@@ -54,7 +54,7 @@ class UserController extends Controller
                     'group' => $group,
                     'permission_id' => $user->permission_id,
                     'permission' => $permission,
-                    'companies_id' => $user->companies_id,
+                    'company_id' => $user->company_id,
                     'company' => $company,
                     'mark_id' => $user->mark_id,
                     'mark' => $mark,
@@ -85,7 +85,7 @@ class UserController extends Controller
         }
 
         try {
-            $company = Company::find($user->companies_id)->company_name;
+            $company = Company::find($user->company_id)->company_name;
         } catch (\Exception $e) {
         }
         try {
@@ -101,7 +101,7 @@ class UserController extends Controller
             'group' => $group,
             'permission_id' => $user->permission_id,
             'permission' => $permission,
-            'companies_id' => $user->companies_id,
+            'company_id' => $user->company_id,
             'company' => $company,
             'mark_id' => $user->mark_id,
             'mark' => $mark,
@@ -166,7 +166,7 @@ class UserController extends Controller
                     'group' => $group_name,
                     'permission_id' => $user['permission_id'],
                     'permission' => $permission['permission'],
-                    'companies_id' => $user['companies_id'],
+                    'company_id' => $user['company_id'],
                     'mark' => $mark1,
                     'avatar' => $user['avatar'],
                 ]
@@ -220,13 +220,13 @@ class UserController extends Controller
             'group_id' => 'sometimes',
             'gender_id' => 'required',
             'permission_id' => 'sometimes',
-            'companies_id' => 'sometimes',
+            'company_id' => 'sometimes',
         ], ['required' => 'Не может быть пустым'], ['required|unique:users' => 'Пользователь с таким логином уже существует']);
 
         $user = new User($userdata);
         $user['email'] = $userdata['email'];
         $user['permission_id'] = $request['permission_id'];
-        $user['companies_id'] = $request['companies_id'];
+        $user['company_id'] = $request['company_id'];
         $user['group_id'] = $request['group_id'];
         $user['gender_id'] = $request['gender_id'];
         $password = $this->generateRandomString(rand(10,15));
@@ -256,7 +256,7 @@ class UserController extends Controller
         }
 
         try {
-            $company = Company::find($user['companies_id'])->company_name;
+            $company = Company::find($user['company_id'])->company_name;
         } catch (\Exception $e) {
         }
         try {
@@ -273,7 +273,7 @@ class UserController extends Controller
             'group' => $group,
             'permission_id' => $user['permission_id'],
             'permission' => $permission,
-            'companies_id' => $user['companies_id'],
+            'company_id' => $user['company_id'],
             'company' => $company,
             'mark_id' => $user['mark_id'],
             'mark' => $mark,

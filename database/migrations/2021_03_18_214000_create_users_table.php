@@ -21,8 +21,8 @@ class CreateUsersTable extends Migration
             $table->foreign('group_id')->references('id')->on('groups');
             $table->unsignedInteger('permission_id')->default(1);
             $table->foreign('permission_id')->references('id')->on('permissions');
-            $table->unsignedInteger('companies_id')->nullable();
-            $table->foreign('companies_id')->references('id')->on('companies');
+            $table->unsignedInteger('company_id')->nullable();
+            $table->foreign('company_id')->references('id')->on('companies');
             $table->unsignedInteger('mark_id')->nullable();
             $table->foreign('mark_id')->references('id')->on('marks');
             $table->text('about_me')->nullable();

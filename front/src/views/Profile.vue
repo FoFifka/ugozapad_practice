@@ -44,7 +44,7 @@
                             <v-card-text v-if="user['permission'] !== ''" label="Роль">
                                 {{ user['permission'] }}
                             </v-card-text>
-                            <v-card-text v-if="user['companies_id'] !== '' || user['companies_id'] !== null"
+                            <v-card-text v-if="user['company_id'] !== '' || user['company_id'] !== null"
                                          label="Компания">
                                 {{ user['company'] }}
                             </v-card-text>

@@ -50,15 +50,15 @@ class CompaniesController extends Controller
     }
 
     public function deleteCompany(Request $request) {
-        $vacansies = Vacancy::get()->where('companies_id', '=', $request['companies_id']);
-        $users = User::get()->where('companies_id', '=', $request['companies_id']);
+        $vacansies = Vacancy::get()->where('company_id', '=', $request['company_id']);
+        $users = User::get()->where('company_id', '=', $request['company_id']);
         foreach ($vacansies as $vacansy) {
             $vacansy->destroy($vacansy['id']);
         }
         foreach ($users as $user) {
             $user->destroy($user['id']);
         }
-        Company::destroy($request['companies_id']);
+        Company::destroy($request['company_id']);
         return '1';
     }
 
@@ -131,15 +131,18 @@ class CompaniesController extends Controller
                 'mark' => $mark,
                 'group' => $group_name,
                 'avatar' => $student->avatar,
+                'vacancy_id' => $willingPracticeUser['vacancy_id']
             ]);
         }
         return $students;
     }
 
-    public function addWillingPractice(Request $request) {
+    public function addWillingPracticeUser(Request $request) {
         $willingPracticeUser = new WillingPracticeUser();
+        $vacancy = Vacancy::find($request['vacancy_id']);
+        $willingPracticeUser['company_id'] = Company::find($vacancy['company_id'])->id;
         $willingPracticeUser['user_id'] = $request['user_id'];
-        $willingPracticeUser['company_id'] = $request['company_id'];
+        $willingPracticeUser['vacancy_id'] = $request['vacancy_id'];
         $willingPracticeUser->save();
 
         return $willingPracticeUser;

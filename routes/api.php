@@ -90,7 +90,7 @@ Route::delete('/deletegroup', [GroupsController::class, 'deleteGroup']);
 
 Route::get('/getwillingpractice', [CompaniesController::class, 'getWillingPractice']);
 Route::get('/getwillingpracticeuser', [CompaniesController::class, 'getWillingPracticeUser']);
-Route::post('/addwillingpractice', [CompaniesController::class, 'addWillingPractice']);
+Route::post('/addwillingpractice', [CompaniesController::class, 'addWillingPracticeUser']);
 Route::delete('/deletewillingpractice', [CompaniesController::class, 'deleteWillingPractice']);
 
 Route::get('/getgenders', function () {

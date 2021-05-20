@@ -44,8 +44,8 @@ export default {
                 let response2 = await axios.get('api/user');
                 commit('SET_USER', response2.data);
 
-                if(response2.data['companies_id'] != null) {
-                    let willingPractice = await axios.get('/api/getwillingpractice', { params: { 'company_id': response2.data['companies_id'] }});
+                if(response2.data['company_id'] != null) {
+                    let willingPractice = await axios.get('/api/getwillingpractice', { params: { 'company_id': response2.data['company_id'] }});
 
                     commit("SET_WILLING_PRACTICE", willingPractice.data);
                 }
@@ -68,7 +68,7 @@ export default {
         async getWillingPracticeUsers({ commit, state }) {
             commit('SET_WILLING_PRACTICE', []);
             try {
-                let willingPractice = await axios.get('/api/getwillingpractice', { params: { 'company_id': state.user['companies_id'] }});
+                let willingPractice = await axios.get('/api/getwillingpractice', { params: { 'company_id': state.user['company_id'] }});
 
                 commit("SET_WILLING_PRACTICE", willingPractice.data);
             } catch (e) {

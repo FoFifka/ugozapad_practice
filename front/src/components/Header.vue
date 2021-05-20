@@ -53,7 +53,7 @@
                             <v-list-item-title>Компании</v-list-item-title>
                         </v-list-item-content>
                     </v-list-item>
-                    <v-list-item :to="'/company_'+user['companies_id']" v-if="user['permission_id'] == 2">
+                    <v-list-item :to="'/company_'+user['company_id']" v-if="user['permission_id'] == 2">
                         <v-list-item-icon>
                             <v-icon>mdi-clipboard-outline</v-icon>
                         </v-list-item-icon>
@@ -138,7 +138,6 @@ export default {
         selectedItem: 0,
         items: [
             { title: 'Главная', icon: 'mdi-home', to: '/'},
-            { title: 'О нас', icon: 'mdi-account-multiple', to: '/about' },
         ],
     }),
     computed: {

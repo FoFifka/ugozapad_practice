@@ -19,6 +19,8 @@ class CreateWillingPracticeUsersTable extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->unsignedInteger('company_id');
             $table->foreign('company_id')->references('id')->on('companies');
+            $table->unsignedInteger('vacancy_id');
+            $table->foreign('vacancy_id')->references('id')->on('vacancies');
             $table->timestamps();
         });
     }

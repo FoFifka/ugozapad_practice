@@ -8,7 +8,7 @@
             >
                 <span class="float-right ma-2" v-if="checkWillingPracticeUsers(willingPracticeUsers) && user['permission_id'] == 2">
                             <v-btn class="mx-10" color="success">Принять</v-btn>
-                            <v-btn class="mx-2" color="red" @click="deniedUser">Отклонить</v-btn>
+                            <v-btn class="mx-2" color="red" @click="denyUser">Отклонить</v-btn>
                 </span>
                 <v-list-item three-line>
                     <v-flex class="wrap row">
@@ -49,7 +49,7 @@
                             <v-card-text v-if="this_user['permission'] !== ''" label="Группа">{{ this_user["permission"]
                                 }}
                             </v-card-text>
-                            <v-card-text v-if="this_user['companies_id'] !== null"
+                            <v-card-text v-if="this_user['company_id'] !== null"
                                          label="Группа">
                                 {{ this_user["company"] }}
                             </v-card-text>
@@ -373,7 +373,7 @@ export default {
             this.dialog_change_aboutme = true;
             this.input_aboutme = this.this_user['about_me'];
         },
-        async deniedUser() {
+        async denyUser() {
             axios.delete('/api/deletewillingpractice', { params: {
                     'user_id': this.user_id
                 }}).then(() => {

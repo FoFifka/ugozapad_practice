@@ -13,8 +13,8 @@
                     showFirstLastPage: true,
                     firstIcon: 'mdi-arrow-collapse-left',
                     lastIcon: 'mdi-arrow-collapse-right',
-                    prevIcon: 'mdi-minus',
-                    nextIcon: 'mdi-plus'
+                    prevIcon: 'mdi-arrow-left',
+                    nextIcon: 'mdi-arrow-right'
                 }">
             <template v-slot:item.actions="{ item }">
                 <!--
@@ -37,7 +37,7 @@
         <v-dialog v-model="dialog_add_group" max-width="1200">
             <v-card :loading="loading" class="px-3">
                 <v-card-title class="headline">
-                    Добавить пользователя
+                    Добавить группу
                 </v-card-title>
                 <v-text-field
                     v-model="addgroup_input_group_name"

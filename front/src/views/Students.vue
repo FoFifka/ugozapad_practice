@@ -11,8 +11,8 @@
                     showFirstLastPage: true,
                     firstIcon: 'mdi-arrow-collapse-left',
                     lastIcon: 'mdi-arrow-collapse-right',
-                    prevIcon: 'mdi-minus',
-                    nextIcon: 'mdi-plus'
+                    prevIcon: 'mdi-arrow-left',
+                    nextIcon: 'mdi-arrow-right'
                 }">
 
             </v-data-table>

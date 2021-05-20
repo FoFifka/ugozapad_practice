@@ -17,8 +17,7 @@ class CreateVacanciesTable extends Migration
             $table->id();
             $table->string('vacancy_name');
             $table->text('vacancy_description');
-            $table->unsignedInteger('companies_id');
-            $table->foreign('companies_id')->references('id')->on('companies');
+            $table->foreignId('company_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamps();
         });
     }

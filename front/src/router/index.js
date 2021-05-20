@@ -1,7 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home";
-import About from "../views/About";
 import Login from "../views/Login";
 import Profile from "../views/Profile";
 import Groups from "../views/Groups";
@@ -37,11 +36,6 @@ const routes = [
         name: "Профиль",
         props: true,
         component: AnotherUserProfile
-    },
-    {
-        path: "/about",
-        component: About,
-        name: "О нас"
     },
     {
         path: "/signin",

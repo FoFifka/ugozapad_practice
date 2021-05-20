@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Company extends Model
 {
     use HasFactory;
+
+    public function vacancies()
+    {
+        return $this->hasMany(Vacancy::class);
+    }
 }

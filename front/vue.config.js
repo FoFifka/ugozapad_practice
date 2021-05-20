@@ -1,7 +1,7 @@
 module.exports = {
     transpileDependencies: ["vuetify"],
     devServer: {
-        proxy: "http://localhost:8000"
+        proxy: "http://ugozapad_practice.test/"
     },
     outputDir: "../public/",
     publicPath: "/",
@@ -9,5 +9,4 @@ module.exports = {
         process.env.NODE_ENV === "production"
             ? "../resources/views/index.blade.php"
             : "index.html"
-
 };

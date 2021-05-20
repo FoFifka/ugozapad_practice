@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Company;
 use App\Models\Vacancy;
+use App\Models\WillingPracticeUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -10,25 +12,18 @@ class VacancyController extends Controller
 {
     public function addVacancy(Request $request)
     {
-        $vacancy = new Vacancy;
-        $id = 1;
-        try {
-            $id = Vacancy::get()->last()->id + 1;
-        } catch (\Exception $exception) {
-            $id = 1;
-        }
-        $vacancy['id'] = $id;
-        $vacancy['vacancy_name'] = $request['vacancy_name'];
-        $vacancy['vacancy_description'] = $request['vacancy_description'];
-        $vacancy['companies_id'] = $request['companies_id'];
-        $vacancy->save();
-
-        return $vacancy;
+        $vacancyData = $request->validate([
+            'vacancy_name' => 'required',
+            'vacancy_description' => 'required',
+        ]);
+        $company = Company::findOrFail($request->get('company_id'));
+        return $company->vacancies()->create($vacancyData);
     }
 
     public function getVacancies(Request $request)
     {
-        return Vacancy::get()->where('companies_id', '=', $request['companies_id']);
+        return Company::find($request->get('company_id'))->vacancies;
+        // return Company::find($request->get('company_id'))->vacancies;
     }
 
     public function getVacancy(Request $request) {
@@ -36,6 +31,10 @@ class VacancyController extends Controller
     }
 
     public function deleteVacancy(Request $request) {
+        $willingpracticeusers = WillingPracticeUser::get()->where('vacancy_id', '=', $request['id']);
+        foreach ($willingpracticeusers as $willingpracticeuser) {
+            WillingPracticeUser::destroy($willingpracticeuser['id']);
+        }
         return Vacancy::destroy($request['id']);
     }
 }

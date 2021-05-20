@@ -17,14 +17,6 @@
                                 md="4"
                             >
                                 <v-card class="elevation-12">
-                                    <v-toolbar
-                                        color="primary"
-                                        dark
-                                        flat
-                                    >
-                                        <v-toolbar-title class="justify-center">Авторизация</v-toolbar-title>
-                                        <v-spacer></v-spacer>
-                                    </v-toolbar>
                                     <v-card-text>
                                         <v-form>
                                             <v-text-field
@@ -46,8 +38,12 @@
                                         </v-form>
                                     </v-card-text>
                                     <v-card-actions>
-                                        <v-spacer></v-spacer>
-                                        <v-btn color="primary" @click="submit" :disabled="disabled" :loading="loading">Войти</v-btn>
+                                        <v-btn min-width="100%" color="primary" @click="submit" :disabled="disabled" :loading="loading">Войти</v-btn>
+                                    </v-card-actions>
+                                    <v-card-actions>
+                                        <v-spacer/>
+                                        <a href="#">Забыли пароль?</a>
+                                        <v-spacer/>
                                     </v-card-actions>
                                 </v-card>
                             </v-col>
